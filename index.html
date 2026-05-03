@@ -1,486 +1,1250 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sana Book Depot POS</title>
-    
-    <!-- External Libraries -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- QuaggaJS for Barcode -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-    <!-- html2pdf for PDF Generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- ESC/POS Encoder for Bluetooth Printing -->
-    <script src="https://cdn.jsdelivr.net/npm/esc-pos-encoder@2.1.0/dist/esc-pos-encoder.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>EduTrack Pro | Copy Inspection System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+  </script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        #interactive.viewport { position: relative; width: 100%; height: 250px; overflow: hidden; border-radius: 12px; }
-        #interactive.viewport > canvas, #interactive.viewport > video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-        canvas.drawingBuffer { display: none; }
-        .loader { border-top-color: #3b82f6; animation: spinner 1.5s linear infinite; }
-        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .modal { transition: opacity 0.25s ease; z-index: 100; }
-        body.modal-active { overflow: hidden; }
-        .splash-hidden { opacity: 0; pointer-events: none; }
-    </style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --text-secondary: #64748b;
+      --border: #e2e8f0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    /* Mobile First - Single Column */
+    @media (max-width: 1024px) {
+      .app-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      body {
+        padding: 0.75rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 0.5rem;
+      }
+      
+      .app-container {
+        gap: 0.75rem;
+      }
+    }
+
+    .panel {
+      background: var(--card);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 640px) {
+      .panel {
+        padding: 1rem;
+        border-radius: 1rem;
+      }
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .panel-header i {
+      font-size: 1.5rem;
+      color: var(--primary);
+      background: #eef2ff;
+      padding: 0.5rem;
+      border-radius: 0.75rem;
+    }
+
+    .panel-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    @media (max-width: 640px) {
+      .panel-header h2 {
+        font-size: 1.1rem;
+      }
+      
+      .panel-header i {
+        font-size: 1.25rem;
+        padding: 0.4rem;
+      }
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-end;
+    }
+
+    @media (max-width: 640px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 0.75rem;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+      background: #f8fafc;
+      color: var(--text);
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23475569' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+
+    /* Button Styles */
+    .btn {
+      padding: 0.75rem 1.25rem;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      min-height: 44px;
+      touch-action: manipulation;
+    }
+
+    @media (max-width: 640px) {
+      .btn {
+        font-size: 0.85rem;
+        padding: 0.7rem 1rem;
+      }
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-danger {
+      background: #fecaca;
+      color: #991b1b;
+    }
+
+    .btn-danger:hover {
+      background: #fca5a5;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+  color: #475569;
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-sm {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      min-height: 36px;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* Lists */
+    .list-container {
+      background: #f8fafc;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.65rem 0.75rem;
+      background: white;
+      border-radius: 0.5rem;
+      margin-bottom: 0.4rem;
+      border: 1px solid #f1f5f9;
+      transition: all 0.2s;
+    }
+
+    .list-item:hover {
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .list-item-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .list-item-info i {
+      color: var(--primary);
+      font-size: 1rem;
+    }
+
+    /* Student Check Grid - FIXED */
+    .student-grid-section {
+      margin: 1rem 0;
+    }
+
+    .student-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+      gap: 0.6rem;
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border);
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 640px) {
+      .student-grid {
+        grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+        gap: 0.5rem;
+        padding: 0.75rem;
+      }
+    }
+
+    .student-item {
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .student-item input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+
+    .student-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 0.4rem;
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 0.65rem;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: center;
+      min-height: 65px;
+      touch-action: manipulation;
+    }
+
+    @media (max-width: 640px) {
+      .student-label {
+        padding: 0.5rem 0.3rem;
+        min-height: 55px;
+        border-radius: 0.5rem;
+      }
+    }
+
+    .student-label:hover {
+      border-color: var(--primary);
+      background: #eef2ff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .student-label:active {
+      transform: scale(0.95);
+    }
+
+    .student-item input:checked + .student-label {
+      background: #eef2ff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    }
+
+    .student-number {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+
+    .student-status {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .student-item input:checked + .student-label .student-status {
+      color: var(--primary);
+    }
+
+    .student-item input:checked + .student-label .student-number {
+      color: var(--primary);
+    }
+
+    /* Check icon on selection */
+    .student-item input:checked + .student-label::after {
+      content: "✓";
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--primary);
+      color: white;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 640px) {
+      .student-item input:checked + .student-label::after {
+        width: 16px;
+        height: 16px;
+        font-size: 0.6rem;
+        top: 3px;
+        right: 3px;
+      }
+    }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+
+    .stat-box {
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .stat-box .label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-box .value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .stat-box.checked .value {
+      color: var(--success);
+    }
+
+    .stat-box.unchecked .value {
+      color: var(--danger);
+    }
+
+    /* Report Preview */
+    .report-preview {
+      background: #f8fafc;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border);
+      max-height: 400px;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      min-width: 800px;
+    }
+
+    .preview-table th {
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 0.5rem;
+      text-align: left;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .preview-table td {
+      padding: 0.65rem 0.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+
+    .preview-table tbody tr:hover {
+      background: #f1f5f9;
+    }
+
+    .grade-badge {
+      padding: 0.25rem 0.6rem;
+      border-radius: 1rem;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-align: center;
+      display: inline-block;
+      min-width: 35px;
+    }
+
+    .grade-a { background: #dbeafe; color: #1e40af; }
+    .grade-b { background: #d1fae5; color: #065f46; }
+    .grade-c { background: #fef3c7; color: #92400e; }
+    .grade-d { background: #fed7aa; color: #9a3412; }
+    .grade-f { background: #fecaca; color: #991b1b; }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: #94a3b8;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-width: 350px;
+      pointer-events: none;
+    }
+
+    @media (max-width: 640px) {
+      .toast-container {
+        left: 1rem;
+        right: 1rem;
+        max-width: none;
+      }
+    }
+
+    .toast {
+      padding: 1rem 1.25rem;
+      border-radius: 0.75rem;
+      color: white;
+      font-weight: 600;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+      animation: slideInRight 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      pointer-events: auto;
+    }
+
+    .toast-success { background: #059669; }
+    .toast-error { background: #dc2626; }
+    .toast-info { background: #4f46e5; }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      @keyframes slideInRight {
+        from {
+          transform: translateY(-100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body>
+  <div class="app-container">
+    <!-- Admin Panel -->
+    <div class="panel">
+      <div class="panel-header">
+        <i class="fas fa-cogs"></i>
+        <h2>Admin Control Panel</h2>
+      </div>
 
-    <!-- Splash Screen -->
-    <div id="splash-screen" class="fixed inset-0 z-[200] bg-white flex flex-col items-center justify-center transition-opacity duration-700">
-        <div class="text-center">
-            <div class="bg-blue-600 text-white p-6 rounded-full inline-block mb-4 shadow-lg">
-                <i class="fas fa-book-open text-5xl"></i>
-            </div>
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">Sana Ullah Book Depot</h1>
-            <p class="text-blue-600 font-semibold tracking-widest uppercase text-sm">POS Billing Software</p>
-            <div class="mt-8 flex justify-center">
-                <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-10 w-10"></div>
-            </div>
-            <p id="splash-status" class="mt-4 text-gray-400 text-xs">Initializing systems...</p>
+      <div class="form-group">
+        <label>Add New Teacher</label>
+        <div class="form-row">
+          <input type="text" id="teacherName" placeholder="Enter teacher name" autocomplete="off">
+          <button class="btn btn-primary" onclick="addTeacher()">
+            <i class="fas fa-plus"></i> <span class="btn-text">Add</span>
+          </button>
         </div>
+      </div>
+
+      <div class="form-group">
+        <label>Add New Subject</label>
+        <div class="form-row">
+          <input type="text" id="subjectName" placeholder="Enter subject name" autocomplete="off">
+          <button class="btn btn-primary" onclick="addSubject()">
+            <i class="fas fa-plus"></i> <span class="btn-text">Add</span>
+          </button>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+        <div>
+          <h3 style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 700; text-transform: uppercase;">Teachers</h3>
+          <div class="list-container" id="teacherList"></div>
+        </div>
+        <div>
+          <h3 style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 700; text-transform: uppercase;">Subjects</h3>
+          <div class="list-container" id="subjectList"></div>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top: 1rem;">
+        <label>Total Number of Students</label>
+        <input type="number" id="totalStudents" value="30" min="1" max="100" onchange="updateStudentGrid()">
+      </div>
+
+      <div class="form-group">
+        <label>Select Teacher & Subject</label>
+        <div class="form-row">
+          <select id="selectTeacher"></select>
+          <select id="selectSubject"></select>
+        </div>
+      </div>
+
+      <div class="student-grid-section">
+        <label style="font-weight: 600; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem; display: block; text-transform: uppercase;">
+          Click to Check/Uncheck Student Copies
+        </label>
+        <div class="student-grid" id="studentGrid"></div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box checked">
+          <div class="label"><i class="fas fa-check-circle"></i> Checked</div>
+          <div class="value" id="checkedCount">0</div>
+        </div>
+        <div class="stat-box unchecked">
+          <div class="label"><i class="fas fa-times-circle"></i> Unchecked</div>
+          <div class="value" id="uncheckedCount">30</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block" onclick="recordInspection()">
+        <i class="fas fa-save"></i> Record This Inspection
+      </button>
     </div>
 
-    <!-- Main App Container -->
-    <div id="app-content" class="invisible">
-        <header class="bg-white shadow-sm sticky top-0 z-50 px-4 py-3">
-            <div class="max-w-5xl mx-auto text-center">
-                <h1 class="text-xl font-bold text-black uppercase tracking-tight">Sana Book Depot Usman Bazar Havelian</h1>
-                <p class="text-sm font-medium text-gray-600"><i class="fas fa-phone-alt mr-2"></i>+923235124366</p>
-            </div>
-        </header>
+    <!-- Report Panel -->
+    <div class="panel" id="reportPanel">
+      <div class="panel-header">
+        <i class="fas fa-chart-bar"></i>
+        <h2>Inspection Report</h2>
+      </div>
 
-        <main class="max-w-5xl mx-auto p-4 space-y-6 pb-24">
-            <!-- Firebase Alert -->
-            <div id="config-alert" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
-                <div class="flex">
-                    <div class="flex-shrink-0"><i class="fas fa-exclamation-triangle text-yellow-400"></i></div>
-                    <div class="ml-3">
-                        <p class="text-sm text-yellow-700">Firebase keys missing. Data will not save. Edit the file to add your config.</p>
-                    </div>
-                </div>
-            </div>
+      <div class="report-preview" id="reportPreview">
+        <div class="empty-state">
+          <i class="fas fa-clipboard-list"></i>
+          <p>No inspections recorded yet</p>
+          <small>Use the admin panel to record inspections</small>
+        </div>
+      </div>
 
-            <!-- Customer Section -->
-            <section class="glass-card p-4">
-                <div class="flex flex-col md:flex-row md:items-end gap-4">
-                    <div class="flex-1">
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Select Customer</label>
-                        <select id="customer-select" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500">
-                            <option value="">Choose a customer...</option>
-                        </select>
-                    </div>
-                    <button id="btn-new-customer" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold flex items-center justify-center transition">
-                        <i class="fas fa-user-plus mr-2"></i> New
-                    </button>
-                    <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 flex-1">
-                        <span class="block text-xs text-blue-600 font-bold uppercase">Prev. Balance</span>
-                        <span id="display-prev-balance" class="text-xl font-bold text-blue-800">Rs. 0.00</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Scanning & Search Section -->
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="glass-card p-4 flex flex-col items-center">
-                    <h3 class="text-sm font-bold text-gray-500 uppercase mb-3 self-start"><i class="fas fa-camera mr-2"></i>Live Scanner</h3>
-                    <div id="interactive" class="viewport mb-3 bg-black"></div>
-                    <div class="flex gap-2 w-full">
-                        <button id="btn-start-scanner" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-bold">Start</button>
-                        <button id="btn-stop-scanner" class="flex-1 bg-red-600 text-white py-3 rounded-lg font-bold">Stop</button>
-                    </div>
-                </div>
-                
-                <div class="glass-card p-4">
-                    <h3 class="text-sm font-bold text-gray-500 uppercase mb-3"><i class="fas fa-search mr-2"></i>Manual Search</h3>
-                    <div class="space-y-4">
-                        <div class="flex gap-2">
-                            <input type="text" id="manual-barcode" placeholder="Enter Barcode..." class="flex-1 p-3 bg-gray-50 border rounded-lg">
-                            <button id="btn-search-manual" class="bg-gray-800 text-white px-6 rounded-lg"><i class="fas fa-search"></i></button>
-                        </div>
-                        <button id="btn-add-new-book" class="w-full border-2 border-dashed border-gray-300 text-gray-500 py-3 rounded-lg hover:bg-gray-50 font-medium">
-                            <i class="fas fa-plus-circle mr-2"></i> Add New Book to System
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Bill Table Section -->
-            <section class="glass-card overflow-hidden">
-                <div class="p-4 border-b bg-gray-50 flex justify-between items-center">
-                    <h3 class="font-bold text-gray-700">Bill Items</h3>
-                    <span id="item-count" class="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-0.5 rounded-full">0 Items</span>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="bg-gray-50 text-xs font-bold text-gray-500 uppercase">
-                            <tr>
-                                <th class="px-4 py-3">Item</th>
-                                <th class="px-4 py-3 text-right">Price</th>
-                                <th class="px-4 py-3 text-center">Qty</th>
-                                <th class="px-4 py-3 text-right">Total</th>
-                                <th class="px-4 py-3 text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bill-body" class="divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-                <div id="empty-state" class="p-8 text-center text-gray-400">
-                    <p>Bill is currently empty</p>
-                </div>
-            </section>
-
-            <!-- Calculations Section -->
-            <section class="glass-card p-6 space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Discount (%)</label>
-                            <input type="number" id="discount-pct" value="0" class="w-full p-3 bg-gray-50 border rounded-lg text-lg font-bold">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Amount Paid (Rs.)</label>
-                            <input type="number" id="amount-paid" value="0" class="w-full p-3 bg-blue-50 border-blue-200 border rounded-lg text-2xl font-bold text-blue-700">
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-xl space-y-2">
-                        <div class="flex justify-between text-gray-600"><span>Total Bill:</span><span id="total-bill">0.00</span></div>
-                        <div class="flex justify-between text-red-600"><span>Discount:</span><span id="discount-amount">0.00</span></div>
-                        <div class="flex justify-between text-gray-600"><span>Prev. Balance:</span><span id="calc-prev-balance">0.00</span></div>
-                        <hr class="my-2 border-gray-200">
-                        <div class="flex justify-between text-xl font-bold text-gray-800"><span>Grand Total:</span><span id="grand-total">0.00</span></div>
-                        <div class="flex justify-between text-lg font-bold text-blue-600"><span>New Balance:</span><span id="final-balance">0.00</span></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Buttons -->
-            <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <button id="btn-save-bill" class="col-span-2 bg-blue-600 text-white p-4 rounded-xl font-bold shadow-lg flex flex-col items-center">
-                    <i class="fas fa-save text-xl mb-1"></i> Save & Generate Bill
-                </button>
-                <button id="btn-bt-print" class="bg-gray-800 text-white p-4 rounded-xl font-bold flex flex-col items-center">
-                    <i class="fab fa-bluetooth-b text-xl mb-1"></i> BT Print
-                </button>
-                <button id="btn-whatsapp" class="bg-green-500 text-white p-4 rounded-xl font-bold flex flex-col items-center">
-                    <i class="fab fa-whatsapp text-xl mb-1"></i> WhatsApp
-                </button>
-            </section>
-        </main>
+      <div style="display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap;">
+        <button class="btn btn-success" onclick="generatePDF()" style="flex: 1; min-width: 150px;">
+          <i class="fas fa-file-pdf"></i> Download PDF
+        </button>
+        <button class="btn btn-danger" onclick="clearAllRecords()" style="flex: 1; min-width: 150px;">
+          <i class="fas fa-trash"></i> Clear All
+        </button>
+      </div>
     </div>
+  </div>
 
-    <!-- Modals -->
-    <div id="item-modal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[110]">
-        <div class="bg-white w-11/12 md:max-w-md p-6 rounded-xl shadow-xl">
-            <h2 class="text-xl font-bold mb-4">Add Item</h2>
-            <div class="space-y-4">
-                <input type="hidden" id="modal-barcode-val">
-                <div><label class="block text-xs font-bold text-gray-400 uppercase">Item Name</label><input type="text" id="modal-item-name" readonly class="w-full bg-gray-50 p-2 border-b font-bold outline-none"></div>
-                <div><label class="block text-xs font-bold text-gray-400 uppercase">Price</label><input type="number" id="modal-item-price" class="w-full p-2 border rounded"></div>
-                <div><label class="block text-xs font-bold text-gray-400 uppercase">Quantity</label><input type="number" id="modal-item-qty" value="1" min="1" class="w-full p-2 border rounded"></div>
-                <div class="flex gap-2 pt-4">
-                    <button id="btn-modal-confirm" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-bold">Add to Bill</button>
-                    <button onclick="closeModal('item-modal')" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-bold">Cancel</button>
-                </div>
-            </div>
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // ============================================
+    // APPLICATION STATE
+    // ============================================
+    const APP_STATE = {
+      teachers: ['T Samar', 'T Farha Naz', 'T Sabeeha', 'T Aneeza'],
+      subjects: ['ENG (A)', 'URDU', 'SCI', 'MATH'],
+      totalStudents: 30,
+      inspections: [],
+      currentChecked: new Set()
+    };
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    function init() {
+      loadState();
+      updateTeacherList();
+      updateSubjectList();
+      updateSelectDropdowns();
+      updateStudentGrid();
+      updateReportPreview();
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem('eduTrackProState');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.teachers?.length) APP_STATE.teachers = parsed.teachers;
+          if (parsed.subjects?.length) APP_STATE.subjects = parsed.subjects;
+          if (parsed.inspections) APP_STATE.inspections = parsed.inspections;
+          if (parsed.totalStudents) {
+            APP_STATE.totalStudents = parsed.totalStudents;
+            document.getElementById('totalStudents').value = parsed.totalStudents;
+          }
+        } catch (e) {
+          console.error('State load failed:', e);
+        }
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem('eduTrackProState', JSON.stringify({
+        teachers: APP_STATE.teachers,
+        subjects: APP_STATE.subjects,
+        inspections: APP_STATE.inspections,
+        totalStudents: APP_STATE.totalStudents
+      }));
+    }
+
+    // ============================================
+    // TEACHER CRUD
+    // ============================================
+    function addTeacher() {
+      const input = document.getElementById('teacherName');
+      const name = input.value.trim();
+      
+      if (!name) {
+        showToast('Please enter a teacher name', 'error');
+        input.focus();
+        return;
+      }
+      
+      if (APP_STATE.teachers.some(t => t.toLowerCase() === name.toLowerCase())) {
+        showToast('Teacher already exists', 'error');
+        return;
+      }
+      
+      APP_STATE.teachers.push(name);
+      input.value = '';
+      input.focus();
+      updateTeacherList();
+      updateSelectDropdowns();
+      saveState();
+      showToast(`Teacher "${name}" added`, 'success');
+    }
+
+    function deleteTeacher(name) {
+      if (confirm(`Delete teacher "${name}"? This will also remove their inspection records.`)) {
+        APP_STATE.teachers = APP_STATE.teachers.filter(t => t !== name);
+        APP_STATE.inspections = APP_STATE.inspections.filter(i => i.teacher !== name);
+        updateTeacherList();
+        updateSelectDropdowns();
+        updateReportPreview();
+        saveState();
+        showToast(`Teacher "${name}" deleted`, 'success');
+      }
+    }
+
+    function updateTeacherList() {
+      const container = document.getElementById('teacherList');
+      if (APP_STATE.teachers.length === 0) {
+        container.innerHTML = '<div style="padding: 1rem; text-align: center; color: #94a3b8; font-size: 0.85rem;">No teachers added</div>';
+        return;
+      }
+      
+      container.innerHTML = APP_STATE.teachers.map(teacher => `
+        <div class="list-item">
+          <div class="list-item-info">
+            <i class="fas fa-user-circle"></i>
+            <span>${escapeHtml(teacher)}</span>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); deleteTeacher('${escapeHtml(teacher).replace(/'/g, "\\'")}')" aria-label="Delete ${escapeHtml(teacher)}">
+            <i class="fas fa-trash"></i>
+          </button>
         </div>
-    </div>
+      `).join('');
+    }
 
-    <!-- Other modals (Customer/Book) - simplified for speed -->
-    <div id="customer-modal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[110]">
-        <div class="bg-white w-11/12 md:max-w-md p-6 rounded-xl">
-            <h2 class="text-xl font-bold mb-4">New Customer</h2>
-            <input type="text" id="new-cust-name" placeholder="Name" class="w-full p-3 border rounded mb-4">
-            <button id="btn-save-customer" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold">Save</button>
+    // ============================================
+    // SUBJECT CRUD
+    // ============================================
+    function addSubject() {
+      const input = document.getElementById('subjectName');
+      const name = input.value.trim();
+      
+      if (!name) {
+        showToast('Please enter a subject name', 'error');
+        input.focus();
+        return;
+      }
+      
+      if (APP_STATE.subjects.some(s => s.toLowerCase() === name.toLowerCase())) {
+        showToast('Subject already exists', 'error');
+        return;
+      }
+      
+      APP_STATE.subjects.push(name);
+      input.value = '';
+      input.focus();
+      updateSubjectList();
+      updateSelectDropdowns();
+      saveState();
+      showToast(`Subject "${name}" added`, 'success');
+    }
+
+    function deleteSubject(name) {
+      if (confirm(`Delete subject "${name}"? This will also remove related inspection records.`)) {
+        APP_STATE.subjects = APP_STATE.subjects.filter(s => s !== name);
+        APP_STATE.inspections = APP_STATE.inspections.filter(i => i.subject !== name);
+        updateSubjectList();
+        updateSelectDropdowns();
+        updateReportPreview();
+        saveState();
+        showToast(`Subject "${name}" deleted`, 'success');
+      }
+    }
+
+    function updateSubjectList() {
+      const container = document.getElementById('subjectList');
+      if (APP_STATE.subjects.length === 0) {
+        container.innerHTML = '<div style="padding: 1rem; text-align: center; color: #94a3b8; font-size: 0.85rem;">No subjects added</div>';
+        return;
+      }
+      
+      container.innerHTML = APP_STATE.subjects.map(subject => `
+        <div class="list-item">
+          <div class="list-item-info">
+            <i class="fas fa-book"></i>
+            <span>${escapeHtml(subject)}</span>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); deleteSubject('${escapeHtml(subject).replace(/'/g, "\\'")}')" aria-label="Delete ${escapeHtml(subject)}">
+            <i class="fas fa-trash"></i>
+          </button>
         </div>
-    </div>
+      `).join('');
+    }
 
-    <div id="book-modal" class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[110]">
-        <div class="bg-white w-11/12 md:max-w-md p-6 rounded-xl">
-            <h2 class="text-xl font-bold mb-4">New Book</h2>
-            <div class="space-y-3">
-                <input type="text" id="new-book-barcode" placeholder="Barcode" class="w-full p-3 border rounded">
-                <input type="text" id="new-book-name" placeholder="Title" class="w-full p-3 border rounded">
-                <input type="number" id="new-book-price" placeholder="Price" class="w-full p-3 border rounded">
-            </div>
-            <button id="btn-save-book" class="w-full bg-green-600 text-white py-3 mt-4 rounded-lg font-bold">Save Book</button>
-        </div>
-    </div>
+    function updateSelectDropdowns() {
+      const teacherSelect = document.getElementById('selectTeacher');
+      const subjectSelect = document.getElementById('selectSubject');
+      
+      teacherSelect.innerHTML = APP_STATE.teachers.map(t => 
+        `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`
+      ).join('') || '<option value="">No teachers available</option>';
+      
+      subjectSelect.innerHTML = APP_STATE.subjects.map(s => 
+        `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`
+      ).join('') || '<option value="">No subjects available</option>';
+    }
 
-    <!-- Hidden Bill Template -->
-    <div id="bill-template" class="fixed -left-[9999px] w-[350px] p-6 bg-white text-black font-sans">
-        <div class="text-center mb-4">
-            <h2 class="text-xl font-bold uppercase">Sana Book Depot</h2>
-            <p class="text-xs">Usman Bazar Havelian</p>
-            <p class="text-xs">0323-5124366</p>
-        </div>
-        <div class="text-xs border-y py-2 my-2 flex justify-between">
-            <span id="pdf-cust-name">Customer</span>
-            <span id="pdf-date">Date</span>
-        </div>
-        <table class="w-full text-xs mb-4">
-            <thead><tr class="border-b"><th class="text-left">Item</th><th class="text-right">Qty</th><th class="text-right">Amt</th></tr></thead>
-            <tbody id="pdf-items"></tbody>
-        </table>
-        <div class="text-xs space-y-1 border-t pt-2">
-            <div class="flex justify-between"><span>Subtotal:</span><span id="pdf-subtotal">0</span></div>
-            <div class="flex justify-between"><span>Prev Bal:</span><span id="pdf-prev">0</span></div>
-            <div class="flex justify-between font-bold"><span>GRAND TOTAL:</span><span id="pdf-grand">0</span></div>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, addDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        // CONFIG: REPLACE THESE
-        const firebaseConfig = {
-  apiKey: "AIzaSyBDnFJu0ZegvbY5-eVhF3SxNCu3uxqs1BE",
-  authDomain: "sana-book-depot.firebaseapp.com",
-  projectId: "sana-book-depot",
-  storageBucket: "sana-book-depot.firebasestorage.app",
-  messagingSenderId: "878136540496",
-  appId: "1:878136540496:web:f1c459adf1cc7a0dd50055",
-  measurementId: "G-XJPE5S6HGR"
-        };
-
-        let db = null;
-        let billItems = [];
-        let customers = [];
-        let selectedCustomer = null;
-        let scannerIsRunning = false;
-
-        // Startup Sequence
-        window.addEventListener('DOMContentLoaded', () => {
-            // Force hide splash after 3 seconds even if firebase fails
-            setTimeout(hideSplash, 3000);
-
-            try {
-                if (firebaseConfig.apiKey) {
-                    const app = initializeApp(firebaseConfig);
-                    db = getFirestore(app);
-                    initApp();
-                } else {
-                    document.getElementById('config-alert').classList.remove('hidden');
-                    document.getElementById('splash-status').innerText = "Running in Demo Mode (No Database)";
-                }
-            } catch (e) {
-                console.error("Firebase Init Error", e);
-            }
+    // ============================================
+    // STUDENT GRID - PERFECT CHECKBOX FUNCTIONALITY
+    // ============================================
+    function updateStudentGrid() {
+      const totalInput = document.getElementById('totalStudents');
+      const newTotal = parseInt(totalInput.value) || 30;
+      
+      // Clamp between 1 and 100
+      APP_STATE.totalStudents = Math.min(100, Math.max(1, newTotal));
+      totalInput.value = APP_STATE.totalStudents;
+      
+      // Clear checked set if total changed
+      const grid = document.getElementById('studentGrid');
+      const oldChecked = new Set(APP_STATE.currentChecked);
+      APP_STATE.currentChecked.clear();
+      
+      // Preserve valid checked students
+      oldChecked.forEach(num => {
+        if (num <= APP_STATE.totalStudents) {
+          APP_STATE.currentChecked.add(num);
+        }
+      });
+      
+      // Generate grid
+      grid.innerHTML = '';
+      for (let i = 1; i <= APP_STATE.totalStudents; i++) {
+        const studentDiv = document.createElement('div');
+        studentDiv.className = 'student-item';
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `student${i}`;
+        checkbox.checked = APP_STATE.currentChecked.has(i);
+        
+        const label = document.createElement('label');
+        label.className = 'student-label';
+        label.setAttribute('for', `student${i}`);
+        label.innerHTML = `
+          <span class="student-number">#${i}</span>
+          <span class="student-status">${checkbox.checked ? 'Done' : 'Pending'}</span>
+        `;
+        
+        // Event listener for checkbox changes
+        checkbox.addEventListener('change', function(e) {
+          e.stopPropagation();
+          if (this.checked) {
+            APP_STATE.currentChecked.add(i);
+            label.querySelector('.student-status').textContent = 'Done';
+          } else {
+            APP_STATE.currentChecked.delete(i);
+            label.querySelector('.student-status').textContent = 'Pending';
+          }
+          updateStats();
         });
+        
+        // Click on the entire item toggles checkbox
+        studentDiv.addEventListener('click', function(e) {
+          e.preventDefault();
+          checkbox.checked = !checkbox.checked;
+          // Trigger change event manually
+          checkbox.dispatchEvent(new Event('change'));
+        });
+        
+        // Prevent label click from double-firing
+        label.addEventListener('click', function(e) {
+          e.preventDefault();
+        });
+        
+        studentDiv.appendChild(checkbox);
+        studentDiv.appendChild(label);
+        grid.appendChild(studentDiv);
+      }
+      
+      updateStats();
+    }
 
-        function hideSplash() {
-            document.getElementById('splash-screen').classList.add('splash-hidden');
-            document.getElementById('app-content').classList.remove('invisible');
-        }
+    function updateStats() {
+      const checked = APP_STATE.currentChecked.size;
+      const unchecked = APP_STATE.totalStudents - checked;
+      
+      document.getElementById('checkedCount').textContent = checked;
+      document.getElementById('uncheckedCount').textContent = unchecked;
+    }
 
-        async function initApp() {
-            await loadCustomers();
-            document.getElementById('splash-status').innerText = "Ready!";
-            hideSplash();
-        }
+    // ============================================
+    // RECORD INSPECTION
+    // ============================================
+    function recordInspection() {
+      const teacherSelect = document.getElementById('selectTeacher');
+      const subjectSelect = document.getElementById('selectSubject');
+      
+      if (!teacherSelect.value || !subjectSelect.value) {
+        showToast('Please add teachers and subjects first', 'error');
+        return;
+      }
+      
+      const teacher = teacherSelect.value;
+      const subject = subjectSelect.value;
+      const totalStudents = APP_STATE.totalStudents;
+      const checked = APP_STATE.currentChecked.size;
+      const unchecked = totalStudents - checked;
+      
+      if (checked === 0) {
+        showToast('Please check at least one student copy', 'error');
+        return;
+      }
+      
+      // Calculate complete/incomplete (simulated - in production this would be tracked)
+      const completeChecked = Math.floor(checked * 0.8);
+      const incompleteChecked = checked - completeChecked;
+      
+      const inspection = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }),
+        teacher,
+        subject,
+        totalStudents,
+        checked,
+        unchecked,
+        complete: completeChecked,
+        incomplete: incompleteChecked,
+        outcome: calculateOutcome(checked, totalStudents),
+        grade: calculateGrade(checked, totalStudents),
+        remarks: generateRemarks(checked, totalStudents, teacher)
+      };
+      
+      APP_STATE.inspections.unshift(inspection); // Add to beginning
+      updateReportPreview();
+      saveState();
+      showToast('Inspection recorded successfully!', 'success');
+      
+      // Reset for next entry
+      APP_STATE.currentChecked.clear();
+      updateStudentGrid();
+    }
 
-        // --- Core Functions ---
-        async function loadCustomers() {
-            if (!db) return;
-            const snap = await getDocs(collection(db, "customers"));
-            const select = document.getElementById('customer-select');
-            select.innerHTML = '<option value="">Choose a customer...</option>';
-            customers = [];
-            snap.forEach(doc => {
-                const data = { id: doc.id, ...doc.data() };
-                customers.push(data);
-                const opt = document.createElement('option');
-                opt.value = data.id; opt.textContent = data.name;
-                select.appendChild(opt);
-            });
-        }
+    function calculateOutcome(checked, total) {
+      return Math.round((checked / total) * 100);
+    }
 
-        document.getElementById('customer-select').onchange = (e) => {
-            const id = e.target.value;
-            selectedCustomer = customers.find(c => c.id === id) || null;
-            updateTotalsDisplay();
-        };
+    function calculateGrade(checked, total) {
+      const percentage = calculateOutcome(checked, total);
+      if (percentage >= 90) return 'A';
+      if (percentage >= 80) return 'B';
+      if (percentage >= 70) return 'C';
+      if (percentage >= 60) return 'D';
+      return 'F';
+    }
 
-        // --- Scanner Logic ---
-        document.getElementById('btn-start-scanner').onclick = () => {
-            if (scannerIsRunning) return;
-            Quagga.init({
-                inputStream: { type: "LiveStream", target: document.querySelector('#interactive'), constraints: { facingMode: "environment" } },
-                decoder: { readers: ["code_128_reader", "ean_reader", "upc_reader"] }
-            }, (err) => {
-                if (err) return alert("Camera error: " + err);
-                Quagga.start();
-                scannerIsRunning = true;
-            });
-            Quagga.onDetected((r) => { Quagga.stop(); scannerIsRunning = false; processBarcode(r.codeResult.code); });
-        };
+    function generateRemarks(checked, total, teacher) {
+      const percentage = calculateOutcome(checked, total);
+      if (percentage >= 90) return 'Excellent work! Outstanding performance.';
+      if (percentage >= 80) return 'Very good. Minor improvements suggested.';
+      if (percentage >= 70) return 'Satisfactory. Regular checking needed.';
+      if (percentage >= 60) return 'Needs improvement. Increase monitoring.';
+      return `Critical: Immediate action required for ${teacher}.`;
+    }
 
-        document.getElementById('btn-stop-scanner').onclick = () => { if (scannerIsRunning) { Quagga.stop(); scannerIsRunning = false; } };
+    // ============================================
+    // REPORT PREVIEW
+    // ============================================
+    function updateReportPreview() {
+      const preview = document.getElementById('reportPreview');
+      
+      if (APP_STATE.inspections.length === 0) {
+        preview.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-clipboard-list"></i>
+            <p>No inspections recorded yet</p>
+            <small>Use the admin panel to record inspections</small>
+          </div>`;
+        return;
+      }
+      
+      preview.innerHTML = `
+        <div style="overflow-x: auto;">
+          <table class="preview-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Teacher</th>
+                <th>Subject</th>
+                <th>Total</th>
+                <th>✓</th>
+                <th>✗</th>
+                <th>Outcome</th>
+                <th>Grade</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${APP_STATE.inspections.map(inv => `
+                <tr>
+                  <td>${inv.date}</td>
+                  <td><strong>${escapeHtml(inv.teacher)}</strong></td>
+                  <td>${escapeHtml(inv.subject)}</td>
+                  <td>${inv.totalStudents}</td>
+                  <td style="color: #10b981;">${inv.checked}</td>
+                  <td style="color: #ef4444;">${inv.unchecked}</td>
+                  <td><strong>${inv.outcome}%</strong></td>
+                  <td><span class="grade-badge grade-${inv.grade.toLowerCase()}">${inv.grade}</span></td>
+                  <td style="font-size: 0.75rem; max-width: 200px;">${escapeHtml(inv.remarks)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
 
-        async function processBarcode(barcode) {
-            if (!db) return alert("Firebase not connected. Manually add items.");
-            const docSnap = await getDoc(doc(db, "books", barcode));
-            if (docSnap.exists()) {
-                const item = docSnap.data();
-                openItemModal(barcode, item.name, item.price);
-            } else {
-                if (confirm(`Barcode ${barcode} not found. Register now?`)) {
-                    document.getElementById('new-book-barcode').value = barcode;
-                    toggleModal('book-modal', true);
-                }
-            }
-        }
+    function clearAllRecords() {
+      if (APP_STATE.inspections.length === 0) {
+        showToast('No records to clear', 'info');
+        return;
+      }
+      
+      if (confirm(`Delete all ${APP_STATE.inspections.length} inspection records? This cannot be undone.`)) {
+        APP_STATE.inspections = [];
+        updateReportPreview();
+        saveState();
+        showToast('All records cleared', 'success');
+      }
+    }
 
-        document.getElementById('btn-search-manual').onclick = () => {
-            const code = document.getElementById('manual-barcode').value;
-            if (code) processBarcode(code);
-        };
+    // ============================================
+    // PDF GENERATION
+    // ============================================
+    async function generatePDF() {
+      if (APP_STATE.inspections.length === 0) {
+        showToast('No records to generate PDF', 'error');
+        return;
+      }
+      
+      const toast = showToast('Generating PDF...', 'info');
+      
+      try {
+        const reportElement = document.getElementById('reportPreview');
+        const canvas = await html2canvas(reportElement, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          backgroundColor: '#ffffff'
+        });
+        
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('l', 'mm', 'a4');
+        
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        
+        // Header
+        pdf.setFillColor(79, 70, 229);
+        pdf.rect(0, 0, pageWidth, 35, 'F');
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(20);
+        pdf.text('Copies Inspection Report', 15, 18);
+        pdf.setFontSize(10);
+        pdf.text(`Generated: ${new Date().toLocaleString()}`, 15, 28);
+        
+        // Table image
+        const imgWidth = pageWidth - 20;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        pdf.addImage(imgData, 'PNG', 10, 40, imgWidth, imgHeight);
+        
+        // Footer
+        pdf.setTextColor(128, 128, 128);
+        pdf.setFontSize(8);
+        pdf.text('EduTrack Pro - Professional Copy Inspection System', 10, pageHeight - 8);
+        pdf.text(`Total Records: ${APP_STATE.inspections.length}`, pageWidth - 50, pageHeight - 8, { align: 'right' });
+        
+        pdf.save(`Inspection_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+        
+        if (toast) toast.remove();
+        showToast('PDF downloaded successfully!', 'success');
+      } catch (error) {
+        console.error('PDF generation failed:', error);
+        if (toast) toast.remove();
+        showToast('Failed to generate PDF. Please try again.', 'error');
+      }
+    }
 
-        // --- Billing ---
-        function openItemModal(barcode, name, price) {
-            document.getElementById('modal-barcode-val').value = barcode;
-            document.getElementById('modal-item-name').value = name;
-            document.getElementById('modal-item-price').value = price;
-            const existing = billItems.find(i => i.barcode === barcode);
-            document.getElementById('modal-item-qty').value = existing ? existing.qty : 1;
-            toggleModal('item-modal', true);
-        }
+    // ============================================
+    // UTILITY FUNCTIONS
+    // ============================================
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        info: 'fa-info-circle'
+      };
+      
+      toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${message}`;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+      
+      return toast;
+    }
 
-        document.getElementById('btn-modal-confirm').onclick = () => {
-            const barcode = document.getElementById('modal-barcode-val').value;
-            const name = document.getElementById('modal-item-name').value;
-            const price = parseFloat(document.getElementById('modal-item-price').value);
-            const qty = parseInt(document.getElementById('modal-item-qty').value);
-            
-            const idx = billItems.findIndex(i => i.barcode === barcode);
-            if (idx > -1) billItems[idx] = { barcode, name, price, qty };
-            else billItems.push({ barcode, name, price, qty });
-            
-            renderBill();
-            toggleModal('item-modal', false);
-        };
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
 
-        function renderBill() {
-            const tbody = document.getElementById('bill-body');
-            tbody.innerHTML = '';
-            document.getElementById('empty-state').style.display = billItems.length ? 'none' : 'block';
-            
-            billItems.forEach((item, idx) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="px-4 py-3 font-medium">${item.name}</td>
-                    <td class="px-4 py-3 text-right">${item.price}</td>
-                    <td class="px-4 py-3 text-center">x${item.qty}</td>
-                    <td class="px-4 py-3 text-right font-bold">${(item.price * item.qty).toFixed(0)}</td>
-                    <td class="px-4 py-3 text-center">
-                        <button onclick="window.removeItem(${idx})" class="text-red-500"><i class="fas fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-            document.getElementById('item-count').innerText = `${billItems.length} Items`;
-            updateTotalsDisplay();
-        }
+    // Handle Enter key for inputs
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('teacherName')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addTeacher();
+      });
+      
+      document.getElementById('subjectName')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addSubject();
+      });
+    });
 
-        window.removeItem = (idx) => { billItems.splice(idx, 1); renderBill(); };
-
-        function updateTotalsDisplay() {
-            const sub = billItems.reduce((a, c) => a + (c.price * c.qty), 0);
-            const discP = parseFloat(document.getElementById('discount-pct').value) || 0;
-            const discA = (sub * discP) / 100;
-            const prev = selectedCustomer ? selectedCustomer.previousBalance : 0;
-            const grand = sub - discA + prev;
-            const paid = parseFloat(document.getElementById('amount-paid').value) || 0;
-            const bal = grand - paid;
-
-            document.getElementById('display-prev-balance').innerText = `Rs. ${prev.toFixed(2)}`;
-            document.getElementById('total-bill').innerText = sub.toFixed(2);
-            document.getElementById('discount-amount').innerText = `- ${discA.toFixed(2)}`;
-            document.getElementById('calc-prev-balance').innerText = prev.toFixed(2);
-            document.getElementById('grand-total').innerText = grand.toFixed(2);
-            document.getElementById('final-balance').innerText = bal.toFixed(2);
-            
-            return { sub, discA, prev, grand, paid, bal };
-        }
-
-        document.getElementById('discount-pct').oninput = updateTotalsDisplay;
-        document.getElementById('amount-paid').oninput = updateTotalsDisplay;
-
-        // --- Save & Print ---
-        document.getElementById('btn-save-bill').onclick = async () => {
-            if (!selectedCustomer) return alert("Select customer");
-            if (!billItems.length) return alert("Bill is empty");
-            if (!db) return alert("Firebase keys required to save data");
-
-            const t = updateTotalsDisplay();
-            const data = {
-                customerName: selectedCustomer.name,
-                items: billItems,
-                subtotal: t.sub,
-                discount: t.discA,
-                grandTotal: t.grand,
-                paid: t.paid,
-                balance: t.bal,
-                timestamp: serverTimestamp()
-            };
-
-            try {
-                await addDoc(collection(db, "ledger"), data);
-                await updateDoc(doc(db, "customers", selectedCustomer.id), { previousBalance: t.bal });
-                
-                // PDF Generation
-                document.getElementById('pdf-cust-name').innerText = data.customerName;
-                document.getElementById('pdf-date').innerText = new Date().toLocaleString();
-                const pdfBody = document.getElementById('pdf-items');
-                pdfBody.innerHTML = '';
-                billItems.forEach(i => {
-                    pdfBody.innerHTML += `<tr><td>${i.name}</td><td class='text-right'>${i.qty}</td><td class='text-right'>${(i.price*i.qty).toFixed(0)}</td></tr>`;
-                });
-                document.getElementById('pdf-subtotal').innerText = t.sub.toFixed(0);
-                document.getElementById('pdf-prev').innerText = t.prev.toFixed(0);
-                document.getElementById('pdf-grand').innerText = t.grand.toFixed(0);
-
-                const element = document.getElementById('bill-template');
-                html2pdf().from(element).save(`Bill_${data.customerName}.pdf`);
-                
-                alert("Bill Saved & PDF Downloaded!");
-                billItems = []; renderBill();
-                loadCustomers();
-            } catch (e) { alert("Error saving: " + e.message); }
-        };
-
-        // UI Helpers
-        function toggleModal(id, show) {
-            const el = document.getElementById(id);
-            if (show) { el.classList.remove('opacity-0', 'pointer-events-none'); document.body.classList.add('modal-active'); }
-            else { el.classList.add('opacity-0', 'pointer-events-none'); document.body.classList.remove('modal-active'); }
-        }
-        window.closeModal = (id) => toggleModal(id, false);
-        document.getElementById('btn-new-customer').onclick = () => toggleModal('customer-modal', true);
-        document.getElementById('btn-add-new-book').onclick = () => toggleModal('book-modal', true);
-
-        // Save Customer/Book Logic
-        document.getElementById('btn-save-customer').onclick = async () => {
-            const name = document.getElementById('new-cust-name').value;
-            if (name && db) { await addDoc(collection(db, "customers"), { name, previousBalance: 0 }); loadCustomers(); toggleModal('customer-modal', false); }
-        };
-        document.getElementById('btn-save-book').onclick = async () => {
-            const b = document.getElementById('new-book-barcode').value;
-            const n = document.getElementById('new-book-name').value;
-            const p = parseFloat(document.getElementById('new-book-price').value);
-            if (b && n && !isNaN(p) && db) { await setDoc(doc(db, "books", b), { name: n, price: p }); toggleModal('book-modal', false); }
-        };
-
-    </script>
+    // Initialize
+    init();
+  </script>
 </body>
 </html>
-
-```

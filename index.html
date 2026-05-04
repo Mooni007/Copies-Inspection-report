@@ -3,17 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>EduTrack Pro | Copy Inspection System</title>
+  <title>YOUR SCHOOL NAME | Copy Inspection System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-  </script>
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
+    :root {
+      --green-950: #052e16;
+      --green-900: #14532d;
+      --green-800: #166534;
+      --green-700: #15803d;
+      --green-600: #16a34a;
+      --green-500: #22c55e;
+      --green-400: #4ade80;
+      --green-300: #86efac;
+      --green-200: #bbf7d0;
+      --green-100: #dcfce7;
+      --green-50: #f0fdf4;
+      --white: #ffffff;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --red-500: #ef4444;
+      --red-600: #dc2626;
+      --red-100: #fee2e2;
+      --amber-500: #f59e0b;
+      --amber-100: #fef3c7;
+      --blue-500: #3b82f6;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+      --shadow-xl: 0 20px 25px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.04);
+      --radius-sm: 0.5rem;
+      --radius: 0.75rem;
+      --radius-lg: 1rem;
+      --radius-xl: 1.25rem;
+      --radius-2xl: 1.5rem;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -21,528 +59,590 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    :root {
-      --primary: #4f46e5;
-      --primary-dark: #4338ca;
-      --success: #10b981;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --bg: #f1f5f9;
-      --card: #ffffff;
-      --text: #1e293b;
-      --text-secondary: #64748b;
-      --border: #e2e8f0;
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(160deg, var(--green-950) 0%, var(--green-900) 40%, #0d3b1f 100%);
+      min-height: 100vh;
+      color: var(--gray-800);
+      line-height: 1.5;
     }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
+    /* Main Container */
+    .app-wrapper {
+      max-width: 1440px;
+      margin: 0 auto;
       padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* School Header */
+    .school-header {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+      border-radius: var(--radius-2xl);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .school-name {
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      font-weight: 900;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin-bottom: 0.25rem;
+    }
+
+    .school-subtitle {
+      font-size: 0.85rem;
+      color: var(--green-300);
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 640px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      .app-wrapper {
+        padding: 0.75rem;
+        gap: 1rem;
+      }
+    }
+
+    /* Dashboard Cards */
+    .dash-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-lg);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      min-height: 110px;
+    }
+
+    .dash-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--green-400);
+    }
+
+    .dash-card:active {
+      transform: scale(0.98);
+    }
+
+    .dash-card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius);
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
     }
 
-    .app-container {
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      align-items: start;
+    .dash-card-icon.teachers { background: #dcfce7; color: var(--green-700); }
+    .dash-card-icon.subjects { background: #dbeafe; color: #1d4ed8; }
+    .dash-card-icon.classes { background: #fef3c7; color: #b45309; }
+    .dash-card-icon.inspection { background: #fce7f3; color: #be185d; }
+    .dash-card-icon.reports { background: #e0e7ff; color: #4338ca; }
+
+    .dash-card-content {
+      flex: 1;
+      min-width: 0;
     }
 
-    /* Mobile First - Single Column */
-    @media (max-width: 1024px) {
-      .app-container {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      
-      body {
-        padding: 0.75rem;
-      }
+    .dash-card-content h3 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-500);
+      margin-bottom: 0.25rem;
     }
 
-    @media (max-width: 640px) {
-      body {
-        padding: 0.5rem;
-      }
-      
-      .app-container {
-        gap: 0.75rem;
-      }
+    .dash-card-content .card-count {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      line-height: 1;
     }
 
-    .panel {
-      background: var(--card);
-      border-radius: 1.25rem;
-      padding: 1.5rem;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      transition: all 0.3s ease;
+    .dash-card-content .card-desc {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      margin-top: 0.2rem;
     }
 
-    @media (max-width: 640px) {
-      .panel {
-        padding: 1rem;
-        border-radius: 1rem;
-      }
+    .dash-card-arrow {
+      color: var(--gray-400);
+      font-size: 1.2rem;
+      transition: transform 0.3s;
     }
 
-    .panel-header {
+    .dash-card:hover .dash-card-arrow {
+      transform: translateX(4px);
+      color: var(--green-600);
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--border);
+      justify-content: center;
+      padding: 1rem;
+      animation: fadeIn 0.2s ease;
     }
 
-    .panel-header i {
-      font-size: 1.5rem;
-      color: var(--primary);
-      background: #eef2ff;
-      padding: 0.5rem;
-      border-radius: 0.75rem;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
-    .panel-header h2 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text);
+    .modal-panel {
+      background: var(--white);
+      border-radius: var(--radius-2xl);
+      width: 100%;
+      max-width: 700px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     @media (max-width: 640px) {
-      .panel-header h2 {
-        font-size: 1.1rem;
-      }
-      
-      .panel-header i {
-        font-size: 1.25rem;
-        padding: 0.4rem;
+      .modal-panel {
+        max-width: 100%;
+        max-height: 90vh;
+        border-radius: var(--radius-xl);
       }
     }
 
-    /* Form Styles */
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 2px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: var(--white);
+      z-index: 10;
+      border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    }
+
+    .modal-header h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .modal-header h2 i {
+      color: var(--green-600);
+    }
+
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: var(--gray-100);
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--gray-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background: var(--red-100);
+      color: var(--red-600);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 2px solid var(--gray-100);
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    /* Form Elements */
     .form-group {
       margin-bottom: 1rem;
     }
 
-    .form-group label {
+    .form-label {
       display: block;
-      font-weight: 600;
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      margin-bottom: 0.4rem;
+      font-weight: 700;
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
+      color: var(--gray-600);
+      margin-bottom: 0.4rem;
     }
 
-    .form-row {
-      display: flex;
-      gap: 0.75rem;
-      align-items: flex-end;
-    }
-
-    @media (max-width: 640px) {
-      .form-row {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-    }
-
-    input, select {
+    .form-input, .form-select {
       width: 100%;
-      padding: 0.75rem 1rem;
-      border: 2px solid var(--border);
-      border-radius: 0.75rem;
+      padding: 0.8rem 1rem;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius);
       font-size: 0.9rem;
       font-family: 'Inter', sans-serif;
       transition: all 0.2s;
-      background: #f8fafc;
-      color: var(--text);
+      background: var(--gray-50);
+      color: var(--gray-900);
       -webkit-appearance: none;
       appearance: none;
     }
 
-    input:focus, select:focus {
+    .form-input:focus, .form-select:focus {
       outline: none;
-      border-color: var(--primary);
-      background: white;
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+      border-color: var(--green-500);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
     }
 
-    select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23475569' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 1rem center;
       padding-right: 2.5rem;
     }
 
-    /* Button Styles */
+    .form-row {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 500px) {
+      .form-row {
+        flex-direction: column;
+      }
+    }
+
+    /* Buttons */
     .btn {
-      padding: 0.75rem 1.25rem;
+      padding: 0.75rem 1.5rem;
       border: none;
-      border-radius: 0.75rem;
+      border-radius: var(--radius);
       font-weight: 600;
       font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 0.5rem;
       font-family: 'Inter', sans-serif;
       white-space: nowrap;
       min-height: 44px;
-      touch-action: manipulation;
+      justify-content: center;
     }
 
-    @media (max-width: 640px) {
-      .btn {
-        font-size: 0.85rem;
-        padding: 0.7rem 1rem;
-      }
-    }
-
-    .btn:active {
-      transform: scale(0.97);
-    }
+    .btn:active { transform: scale(0.96); }
 
     .btn-primary {
-      background: var(--primary);
+      background: var(--green-700);
       color: white;
-      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+      box-shadow: 0 2px 8px rgba(21,128,61,0.3);
     }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
-    }
-
-    .btn-danger {
-      background: #fecaca;
-      color: #991b1b;
-    }
-
-    .btn-danger:hover {
-      background: #fca5a5;
-    }
+    .btn-primary:hover { background: var(--green-800); }
 
     .btn-success {
-      background: var(--success);
+      background: var(--green-600);
       color: white;
-      box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
     }
+    .btn-success:hover { background: var(--green-700); }
 
-    .btn-success:hover {
-      background: #059669;
+    .btn-danger {
+      background: var(--red-100);
+      color: var(--red-600);
     }
+    .btn-danger:hover { background: #fecaca; }
 
-    .btn-secondary {
-      background: #f1f5f9;
-  color: #475569;
+    .btn-outline {
+      background: var(--white);
+      color: var(--green-700);
+      border: 2px solid var(--green-300);
     }
-
-    .btn-secondary:hover {
-      background: #e2e8f0;
-    }
+    .btn-outline:hover { background: var(--green-50); }
 
     .btn-sm {
-      padding: 0.5rem 0.75rem;
-      font-size: 0.8rem;
-      min-height: 36px;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.78rem;
+      min-height: 34px;
     }
 
-    .btn-block {
-      width: 100%;
-    }
+    .btn-block { width: 100%; }
 
-    /* Lists */
+    /* List Items */
     .list-container {
-      background: #f8fafc;
-      border-radius: 0.75rem;
-      padding: 0.75rem;
-      max-height: 250px;
+      max-height: 280px;
       overflow-y: auto;
-      border: 1px solid var(--border);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      background: var(--gray-50);
     }
 
     .list-item {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 0.65rem 0.75rem;
-      background: white;
-      border-radius: 0.5rem;
-      margin-bottom: 0.4rem;
-      border: 1px solid #f1f5f9;
-      transition: all 0.2s;
+      justify-content: space-between;
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid var(--gray-100);
+      background: var(--white);
+      transition: background 0.15s;
     }
 
-    .list-item:hover {
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
+    .list-item:hover { background: var(--green-50); }
+    .list-item:last-child { border-bottom: none; }
 
     .list-item-info {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.85rem;
+      gap: 0.6rem;
       font-weight: 500;
-      color: var(--text);
+      font-size: 0.9rem;
       flex: 1;
-      min-width: 0;
     }
 
-    .list-item-info i {
-      color: var(--primary);
-      font-size: 1rem;
-    }
+    .list-item-info i { color: var(--green-600); }
 
-    /* Student Check Grid - FIXED */
-    .student-grid-section {
-      margin: 1rem 0;
-    }
-
+    /* Student Grid for Inspection */
     .student-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
       gap: 0.6rem;
-      padding: 1rem;
-      background: #f8fafc;
-      border-radius: 0.75rem;
-      border: 1px solid var(--border);
-      max-height: 300px;
+      padding: 0.75rem;
+      background: var(--gray-50);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      max-height: 320px;
       overflow-y: auto;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 400px) {
       .student-grid {
-        grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
-        gap: 0.5rem;
-        padding: 0.75rem;
+        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+        gap: 0.4rem;
       }
     }
 
-    .student-item {
+    .student-cell {
       position: relative;
       cursor: pointer;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
-    .student-item input[type="checkbox"] {
+    .student-cell input[type="checkbox"] {
       position: absolute;
       opacity: 0;
+      pointer-events: none;
       width: 0;
       height: 0;
-      pointer-events: none;
     }
 
-    .student-label {
+    .student-card {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 0.65rem 0.4rem;
-      background: white;
-      border: 2px solid var(--border);
-      border-radius: 0.65rem;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      gap: 0.3rem;
+      padding: 0.7rem 0.3rem;
+      background: var(--white);
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius);
+      transition: all 0.2s;
       text-align: center;
-      min-height: 65px;
-      touch-action: manipulation;
     }
 
-    @media (max-width: 640px) {
-      .student-label {
-        padding: 0.5rem 0.3rem;
-        min-height: 55px;
-        border-radius: 0.5rem;
-      }
+    .student-card:hover {
+      border-color: var(--green-400);
+      background: var(--green-50);
     }
 
-    .student-label:hover {
-      border-color: var(--primary);
-      background: #eef2ff;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    .student-cell input:checked + .student-card {
+      background: var(--green-100);
+      border-color: var(--green-500);
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
     }
 
-    .student-label:active {
-      transform: scale(0.95);
+    .student-icon {
+      font-size: 1.5rem;
+      color: var(--gray-400);
+      transition: color 0.2s;
     }
 
-    .student-item input:checked + .student-label {
-      background: #eef2ff;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    .student-cell input:checked + .student-card .student-icon {
+      color: var(--green-600);
     }
 
-    .student-number {
+    .student-roll {
       font-weight: 700;
-      font-size: 1rem;
-      color: var(--text);
-      line-height: 1;
-      margin-bottom: 0.2rem;
+      font-size: 0.8rem;
+      color: var(--gray-700);
     }
 
-    .student-status {
-      font-size: 0.65rem;
-      font-weight: 600;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .student-item input:checked + .student-label .student-status {
-      color: var(--primary);
-    }
-
-    .student-item input:checked + .student-label .student-number {
-      color: var(--primary);
-    }
-
-    /* Check icon on selection */
-    .student-item input:checked + .student-label::after {
-      content: "✓";
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      background: var(--primary);
-      color: white;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
+    .student-check-badge {
+      display: none;
+      font-size: 0.6rem;
+      color: var(--green-700);
       font-weight: 700;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    @media (max-width: 640px) {
-      .student-item input:checked + .student-label::after {
-        width: 16px;
-        height: 16px;
-        font-size: 0.6rem;
-        top: 3px;
-        right: 3px;
-      }
+    .student-cell input:checked + .student-card .student-check-badge {
+      display: block;
     }
 
-    /* Stats */
-    .stats-row {
+    /* Stats mini */
+    .inspection-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.75rem;
       margin: 1rem 0;
     }
 
-    .stat-box {
-      background: #f8fafc;
-      padding: 1rem;
-      border-radius: 0.75rem;
+    .inspect-stat {
+      padding: 0.9rem;
+      border-radius: var(--radius);
       text-align: center;
-      border: 1px solid var(--border);
-    }
-
-    .stat-box .label {
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.3rem;
-    }
-
-    .stat-box .value {
-      font-size: 1.5rem;
       font-weight: 700;
-      color: var(--text);
     }
 
-    .stat-box.checked .value {
-      color: var(--success);
+    .inspect-stat.checked-stat {
+      background: var(--green-100);
+      color: var(--green-800);
     }
 
-    .stat-box.unchecked .value {
-      color: var(--danger);
+    .inspect-stat.unchecked-stat {
+      background: var(--red-100);
+      color: var(--red-600);
     }
 
-    /* Report Preview */
-    .report-preview {
-      background: #f8fafc;
-      border-radius: 0.75rem;
-      border: 1px solid var(--border);
-      max-height: 400px;
-      overflow: auto;
+    .inspect-stat .stat-num {
+      font-size: 1.8rem;
+      display: block;
+    }
+
+    /* Report Table */
+    .report-table-wrap {
+      overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      border-radius: var(--radius);
     }
 
-    .preview-table {
+    .report-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.8rem;
-      min-width: 800px;
+      min-width: 750px;
     }
 
-    .preview-table th {
-      background: var(--primary);
+    .report-table th {
+      background: var(--green-800);
       color: white;
-      padding: 0.75rem 0.5rem;
-      text-align: left;
+      padding: 0.7rem 0.6rem;
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      text-align: left;
       position: sticky;
       top: 0;
-      z-index: 10;
     }
 
-    .preview-table td {
-      padding: 0.65rem 0.5rem;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.8rem;
+    .report-table td {
+      padding: 0.65rem 0.6rem;
+      border-bottom: 1px solid var(--gray-200);
     }
 
-    .preview-table tbody tr:hover {
-      background: #f1f5f9;
+    .report-table tbody tr:hover {
+      background: var(--green-50);
     }
 
     .grade-badge {
-      padding: 0.25rem 0.6rem;
-      border-radius: 1rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
       font-weight: 700;
-      font-size: 0.75rem;
-      text-align: center;
-      display: inline-block;
-      min-width: 35px;
+      font-size: 0.7rem;
     }
 
-    .grade-a { background: #dbeafe; color: #1e40af; }
-    .grade-b { background: #d1fae5; color: #065f46; }
-    .grade-c { background: #fef3c7; color: #92400e; }
-    .grade-d { background: #fed7aa; color: #9a3412; }
-    .grade-f { background: #fecaca; color: #991b1b; }
+    .grade-a { background: #bbf7d0; color: #14532d; }
+    .grade-b { background: #dbeafe; color: #1e3a8a; }
+    .grade-c { background: #fef3c7; color: #78350f; }
+    .grade-d { background: #fed7aa; color: #7c2d12; }
+    .grade-f { background: #fecaca; color: #7f1d1d; }
 
-    .empty-state {
-      text-align: center;
-      padding: 2rem;
-      color: #94a3b8;
-    }
-
-    .empty-state i {
-      font-size: 3rem;
-      display: block;
+    /* Date accordion */
+    .date-group {
       margin-bottom: 0.75rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      overflow: hidden;
     }
 
-    /* Toast Notifications */
+    .date-header {
+      background: var(--green-50);
+      padding: 0.75rem 1rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--green-900);
+      border-bottom: 1px solid var(--green-200);
+    }
+
+    .date-header:hover {
+      background: var(--green-100);
+    }
+
+    .date-body {
+      background: var(--white);
+    }
+
+    .date-body.collapsed {
+      display: none;
+    }
+
+    /* Toast */
     .toast-container {
       position: fixed;
       top: 1rem;
@@ -551,679 +651,755 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      max-width: 350px;
-      pointer-events: none;
+      max-width: 360px;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 500px) {
       .toast-container {
-        left: 1rem;
-        right: 1rem;
+        left: 0.5rem;
+        right: 0.5rem;
         max-width: none;
       }
     }
 
     .toast {
-      padding: 1rem 1.25rem;
-      border-radius: 0.75rem;
+      padding: 0.9rem 1.2rem;
+      border-radius: var(--radius);
       color: white;
       font-weight: 600;
       font-size: 0.85rem;
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-      animation: slideInRight 0.3s ease;
+      box-shadow: var(--shadow-lg);
+      animation: toastIn 0.3s ease;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      pointer-events: auto;
     }
 
     .toast-success { background: #059669; }
     .toast-error { background: #dc2626; }
-    .toast-info { background: #4f46e5; }
+    .toast-info { background: #1d4ed8; }
 
-    @keyframes slideInRight {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+    @keyframes toastIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
 
-    @media (max-width: 640px) {
-      @keyframes slideInRight {
-        from {
-          transform: translateY(-100%);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--gray-400);
     }
+    .empty-state i { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; }
 
-    /* Scrollbar Styling */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 3px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 3px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
+    /* Utility */
+    .text-center { text-align: center; }
+    .mt-1 { margin-top: 1rem; }
+    .mt-2 { margin-top: 1.5rem; }
+    .gap-1 { gap: 0.75rem; }
+    .flex-wrap { flex-wrap: wrap; }
   </style>
 </head>
 <body>
-  <div class="app-container">
-    <!-- Admin Panel -->
-    <div class="panel">
-      <div class="panel-header">
-        <i class="fas fa-cogs"></i>
-        <h2>Admin Control Panel</h2>
-      </div>
+  <div class="app-wrapper">
+    <!-- SCHOOL HEADER -->
+    <header class="school-header">
+      <h1 class="school-name">YOUR SCHOOL NAME</h1>
+      <p class="school-subtitle">Copy Inspection &amp; Monitoring System</p>
+    </header>
 
-      <div class="form-group">
-        <label>Add New Teacher</label>
-        <div class="form-row">
-          <input type="text" id="teacherName" placeholder="Enter teacher name" autocomplete="off">
-          <button class="btn btn-primary" onclick="addTeacher()">
-            <i class="fas fa-plus"></i> <span class="btn-text">Add</span>
-          </button>
+    <!-- DASHBOARD CARDS -->
+    <div class="dashboard-grid" id="dashboardGrid">
+      <!-- Card 1: Teacher Record -->
+      <div class="dash-card" onclick="openModal('teacherModal')">
+        <div class="dash-card-icon teachers"><i class="fas fa-chalkboard-teacher"></i></div>
+        <div class="dash-card-content">
+          <h3>Teacher Record</h3>
+          <div class="card-count" id="teacherCount">0</div>
+          <div class="card-desc">Add / Delete Teachers</div>
         </div>
+        <i class="fas fa-chevron-right dash-card-arrow"></i>
       </div>
 
-      <div class="form-group">
-        <label>Add New Subject</label>
-        <div class="form-row">
-          <input type="text" id="subjectName" placeholder="Enter subject name" autocomplete="off">
-          <button class="btn btn-primary" onclick="addSubject()">
-            <i class="fas fa-plus"></i> <span class="btn-text">Add</span>
-          </button>
+      <!-- Card 2: Subject Record -->
+      <div class="dash-card" onclick="openModal('subjectModal')">
+        <div class="dash-card-icon subjects"><i class="fas fa-book-open"></i></div>
+        <div class="dash-card-content">
+          <h3>Subject Record</h3>
+          <div class="card-count" id="subjectCount">0</div>
+          <div class="card-desc">Add / Delete Subjects</div>
         </div>
+        <i class="fas fa-chevron-right dash-card-arrow"></i>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-        <div>
-          <h3 style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 700; text-transform: uppercase;">Teachers</h3>
-          <div class="list-container" id="teacherList"></div>
+      <!-- Card 3: Class Record -->
+      <div class="dash-card" onclick="openModal('classModal')">
+        <div class="dash-card-icon classes"><i class="fas fa-users"></i></div>
+        <div class="dash-card-content">
+          <h3>Class Record</h3>
+          <div class="card-count" id="classCount">0</div>
+          <div class="card-desc">Add / Delete Classes</div>
         </div>
-        <div>
-          <h3 style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 700; text-transform: uppercase;">Subjects</h3>
-          <div class="list-container" id="subjectList"></div>
+        <i class="fas fa-chevron-right dash-card-arrow"></i>
+      </div>
+
+      <!-- Card 4: Record Inspection -->
+      <div class="dash-card" onclick="openInspectionModal()">
+        <div class="dash-card-icon inspection"><i class="fas fa-clipboard-check"></i></div>
+        <div class="dash-card-content">
+          <h3>Record Inspection</h3>
+          <div class="card-count" id="inspectionCount">0</div>
+          <div class="card-desc">New Inspection Entry</div>
         </div>
+        <i class="fas fa-chevron-right dash-card-arrow"></i>
       </div>
 
-      <div class="form-group" style="margin-top: 1rem;">
-        <label>Total Number of Students</label>
-        <input type="number" id="totalStudents" value="30" min="1" max="100" onchange="updateStudentGrid()">
-      </div>
-
-      <div class="form-group">
-        <label>Select Teacher & Subject</label>
-        <div class="form-row">
-          <select id="selectTeacher"></select>
-          <select id="selectSubject"></select>
+      <!-- Card 5: Inspection Report -->
+      <div class="dash-card" onclick="openReportModal()">
+        <div class="dash-card-icon reports"><i class="fas fa-file-alt"></i></div>
+        <div class="dash-card-content">
+          <h3>Inspection Report</h3>
+          <div class="card-count" id="reportCount">0</div>
+          <div class="card-desc">View Date-wise Records</div>
         </div>
-      </div>
-
-      <div class="student-grid-section">
-        <label style="font-weight: 600; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem; display: block; text-transform: uppercase;">
-          Click to Check/Uncheck Student Copies
-        </label>
-        <div class="student-grid" id="studentGrid"></div>
-      </div>
-
-      <div class="stats-row">
-        <div class="stat-box checked">
-          <div class="label"><i class="fas fa-check-circle"></i> Checked</div>
-          <div class="value" id="checkedCount">0</div>
-        </div>
-        <div class="stat-box unchecked">
-          <div class="label"><i class="fas fa-times-circle"></i> Unchecked</div>
-          <div class="value" id="uncheckedCount">30</div>
-        </div>
-      </div>
-
-      <button class="btn btn-primary btn-block" onclick="recordInspection()">
-        <i class="fas fa-save"></i> Record This Inspection
-      </button>
-    </div>
-
-    <!-- Report Panel -->
-    <div class="panel" id="reportPanel">
-      <div class="panel-header">
-        <i class="fas fa-chart-bar"></i>
-        <h2>Inspection Report</h2>
-      </div>
-
-      <div class="report-preview" id="reportPreview">
-        <div class="empty-state">
-          <i class="fas fa-clipboard-list"></i>
-          <p>No inspections recorded yet</p>
-          <small>Use the admin panel to record inspections</small>
-        </div>
-      </div>
-
-      <div style="display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap;">
-        <button class="btn btn-success" onclick="generatePDF()" style="flex: 1; min-width: 150px;">
-          <i class="fas fa-file-pdf"></i> Download PDF
-        </button>
-        <button class="btn btn-danger" onclick="clearAllRecords()" style="flex: 1; min-width: 150px;">
-          <i class="fas fa-trash"></i> Clear All
-        </button>
+        <i class="fas fa-chevron-right dash-card-arrow"></i>
       </div>
     </div>
   </div>
 
+  <!-- Dynamic Modals Container -->
+  <div id="modalContainer"></div>
+
+  <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
-    // ============================================
-    // APPLICATION STATE
-    // ============================================
-    const APP_STATE = {
-      teachers: ['T Samar', 'T Farha Naz', 'T Sabeeha', 'T Aneeza'],
-      subjects: ['ENG (A)', 'URDU', 'SCI', 'MATH'],
-      totalStudents: 30,
-      inspections: [],
-      currentChecked: new Set()
+    // =====================================================
+    // APPLICATION STATE (Centralized)
+    // =====================================================
+    const AppState = {
+      teachers: [],
+      subjects: [],
+      classes: [],        // { id, name, totalStudents }
+      inspections: [],    // { id, date, classId, teacher, subject, checkedSet[], totalStudents }
+      
+      init() {
+        const saved = localStorage.getItem('yourSchoolInspection');
+        if (saved) {
+          try {
+            const data = JSON.parse(saved);
+            this.teachers = data.teachers || [];
+            this.subjects = data.subjects || [];
+            this.classes = data.classes || [];
+            this.inspections = data.inspections || [];
+          } catch(e) { console.warn('State load failed'); }
+        }
+        // Defaults if empty
+        if (this.teachers.length === 0) {
+          this.teachers = ['Mr. Ahmad Khan', 'Ms. Fatima Zahra', 'Mr. Bilal Siddique', 'Ms. Ayesha Noor'];
+        }
+        if (this.subjects.length === 0) {
+          this.subjects = ['English', 'Urdu', 'Mathematics', 'Science', 'Islamiat'];
+        }
+        if (this.classes.length === 0) {
+          this.classes = [
+            { id: 'c1', name: 'Class 5', totalStudents: 30 },
+            { id: 'c2', name: 'Class 6', totalStudents: 28 }
+          ];
+        }
+        this.save();
+        this.refreshDashboard();
+      },
+
+      save() {
+        localStorage.setItem('yourSchoolInspection', JSON.stringify({
+          teachers: this.teachers,
+          subjects: this.subjects,
+          classes: this.classes,
+          inspections: this.inspections
+        }));
+      },
+
+      refreshDashboard() {
+        document.getElementById('teacherCount').textContent = this.teachers.length;
+        document.getElementById('subjectCount').textContent = this.subjects.length;
+        document.getElementById('classCount').textContent = this.classes.length;
+        document.getElementById('inspectionCount').textContent = this.inspections.length;
+        document.getElementById('reportCount').textContent = this.inspections.length;
+      },
+
+      addTeacher(name) {
+        if (this.teachers.includes(name)) return false;
+        this.teachers.push(name);
+        this.save();
+        this.refreshDashboard();
+        return true;
+      },
+
+      deleteTeacher(name) {
+        this.teachers = this.teachers.filter(t => t !== name);
+        this.inspections = this.inspections.filter(i => i.teacher !== name);
+        this.save();
+        this.refreshDashboard();
+      },
+
+      addSubject(name) {
+        if (this.subjects.includes(name)) return false;
+        this.subjects.push(name);
+        this.save();
+        this.refreshDashboard();
+        return true;
+      },
+
+      deleteSubject(name) {
+        this.subjects = this.subjects.filter(s => s !== name);
+        this.inspections = this.inspections.filter(i => i.subject !== name);
+        this.save();
+        this.refreshDashboard();
+      },
+
+      addClass(name, total) {
+        const exists = this.classes.some(c => c.name.toLowerCase() === name.toLowerCase());
+        if (exists) return false;
+        const newClass = { id: 'c' + Date.now(), name, totalStudents: parseInt(total) || 30 };
+        this.classes.push(newClass);
+        this.save();
+        this.refreshDashboard();
+        return true;
+      },
+
+      deleteClass(id) {
+        this.classes = this.classes.filter(c => c.id !== id);
+        this.inspections = this.inspections.filter(i => i.classId !== id);
+        this.save();
+        this.refreshDashboard();
+      },
+
+      getClassById(id) {
+        return this.classes.find(c => c.id === id) || null;
+      },
+
+      // Record or merge inspection for the same date
+      recordInspection(inspectionData) {
+        const { date, classId, teacher, subject, checkedSet, totalStudents } = inspectionData;
+        // Find existing inspection for same date, class, teacher, subject
+        const existingIndex = this.inspections.findIndex(i => 
+          i.date === date && i.classId === classId && i.teacher === teacher && i.subject === subject
+        );
+
+        if (existingIndex >= 0) {
+          // Merge: combine checked sets
+          const existing = this.inspections[existingIndex];
+          const mergedSet = new Set([...existing.checkedSet, ...checkedSet]);
+          existing.checkedSet = Array.from(mergedSet);
+          existing.totalStudents = totalStudents; // update total if changed
+          this.inspections[existingIndex] = existing;
+        } else {
+          this.inspections.push({
+            id: 'i' + Date.now(),
+            date,
+            classId,
+            teacher,
+            subject,
+            checkedSet: Array.from(checkedSet),
+            totalStudents
+          });
+        }
+        this.save();
+        this.refreshDashboard();
+      },
+
+      getInspectionsByDate() {
+        const grouped = {};
+        this.inspections.forEach(inv => {
+          if (!grouped[inv.date]) grouped[inv.date] = [];
+          grouped[inv.date].push(inv);
+        });
+        // Sort dates descending
+        const sorted = {};
+        Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a)).forEach(date => {
+          sorted[date] = grouped[date];
+        });
+        return sorted;
+      }
     };
 
-    // ============================================
-    // INITIALIZATION
-    // ============================================
-    function init() {
-      loadState();
-      updateTeacherList();
-      updateSubjectList();
-      updateSelectDropdowns();
-      updateStudentGrid();
-      updateReportPreview();
+    // =====================================================
+    // MODAL MANAGEMENT
+    // =====================================================
+    let currentModal = null;
+
+    function openModal(type) {
+      closeModal();
+      const container = document.getElementById('modalContainer');
+      let html = '';
+      
+      if (type === 'teacherModal') {
+        html = buildTeacherModal();
+      } else if (type === 'subjectModal') {
+        html = buildSubjectModal();
+      } else if (type === 'classModal') {
+        html = buildClassModal();
+      }
+      
+      container.innerHTML = html;
+      currentModal = type;
+      bindModalEvents(type);
     }
 
-    function loadState() {
-      const saved = localStorage.getItem('eduTrackProState');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          if (parsed.teachers?.length) APP_STATE.teachers = parsed.teachers;
-          if (parsed.subjects?.length) APP_STATE.subjects = parsed.subjects;
-          if (parsed.inspections) APP_STATE.inspections = parsed.inspections;
-          if (parsed.totalStudents) {
-            APP_STATE.totalStudents = parsed.totalStudents;
-            document.getElementById('totalStudents').value = parsed.totalStudents;
+    function closeModal() {
+      document.getElementById('modalContainer').innerHTML = '';
+      currentModal = null;
+    }
+
+    function buildTeacherModal() {
+      return `
+        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+          <div class="modal-panel">
+            <div class="modal-header">
+              <h2><i class="fas fa-chalkboard-teacher"></i> Teacher Record</h2>
+              <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-row">
+                <input type="text" class="form-input" id="newTeacherInput" placeholder="Enter teacher name" style="flex:1;">
+                <button class="btn btn-primary" id="addTeacherBtn"><i class="fas fa-plus"></i> Add</button>
+              </div>
+              <div class="list-container mt-1" id="teacherListContainer">
+                ${AppState.teachers.map(t => `
+                  <div class="list-item">
+                    <div class="list-item-info"><i class="fas fa-user-circle"></i> ${escapeHtml(t)}</div>
+                    <button class="btn btn-danger btn-sm" data-delete-teacher="${escapeHtml(t)}"><i class="fas fa-trash"></i></button>
+                  </div>
+                `).join('') || '<div class="empty-state"><i class="fas fa-user-slash"></i><p>No teachers added</p></div>'}
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function buildSubjectModal() {
+      return `
+        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+          <div class="modal-panel">
+            <div class="modal-header">
+              <h2><i class="fas fa-book-open"></i> Subject Record</h2>
+              <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-row">
+                <input type="text" class="form-input" id="newSubjectInput" placeholder="Enter subject name" style="flex:1;">
+                <button class="btn btn-primary" id="addSubjectBtn"><i class="fas fa-plus"></i> Add</button>
+              </div>
+              <div class="list-container mt-1" id="subjectListContainer">
+                ${AppState.subjects.map(s => `
+                  <div class="list-item">
+                    <div class="list-item-info"><i class="fas fa-book"></i> ${escapeHtml(s)}</div>
+                    <button class="btn btn-danger btn-sm" data-delete-subject="${escapeHtml(s)}"><i class="fas fa-trash"></i></button>
+                  </div>
+                `).join('') || '<div class="empty-state"><i class="fas fa-book-dead"></i><p>No subjects added</p></div>'}
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function buildClassModal() {
+      return `
+        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+          <div class="modal-panel">
+            <div class="modal-header">
+              <h2><i class="fas fa-users"></i> Class Record</h2>
+              <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-row">
+                <input type="text" class="form-input" id="newClassNameInput" placeholder="Class name (e.g., Class 7)" style="flex:2;">
+                <input type="number" class="form-input" id="newClassStudentsInput" placeholder="No. of Students" value="30" min="1" style="flex:1;">
+                <button class="btn btn-primary" id="addClassBtn"><i class="fas fa-plus"></i> Add</button>
+              </div>
+              <div class="list-container mt-1" id="classListContainer">
+                ${AppState.classes.map(c => `
+                  <div class="list-item">
+                    <div class="list-item-info"><i class="fas fa-users"></i> ${escapeHtml(c.name)} <span style="color:var(--gray-400);font-size:0.8rem;">(${c.totalStudents} students)</span></div>
+                    <button class="btn btn-danger btn-sm" data-delete-class="${c.id}"><i class="fas fa-trash"></i></button>
+                  </div>
+                `).join('') || '<div class="empty-state"><i class="fas fa-user-graduate"></i><p>No classes added</p></div>'}
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function bindModalEvents(type) {
+      if (type === 'teacherModal') {
+        document.getElementById('addTeacherBtn')?.addEventListener('click', () => {
+          const input = document.getElementById('newTeacherInput');
+          const name = input.value.trim();
+          if (!name) { showToast('Enter teacher name', 'error'); return; }
+          if (AppState.addTeacher(name)) {
+            showToast('Teacher added!', 'success');
+            openModal('teacherModal'); // refresh
+          } else {
+            showToast('Teacher already exists', 'error');
           }
-        } catch (e) {
-          console.error('State load failed:', e);
-        }
+        });
+        document.querySelectorAll('[data-delete-teacher]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const name = btn.dataset.deleteTeacher;
+            if (confirm(`Delete teacher "${name}"?`)) {
+              AppState.deleteTeacher(name);
+              showToast('Teacher deleted', 'success');
+              openModal('teacherModal');
+            }
+          });
+        });
+      } else if (type === 'subjectModal') {
+        document.getElementById('addSubjectBtn')?.addEventListener('click', () => {
+          const input = document.getElementById('newSubjectInput');
+          const name = input.value.trim();
+          if (!name) { showToast('Enter subject name', 'error'); return; }
+          if (AppState.addSubject(name)) {
+            showToast('Subject added!', 'success');
+            openModal('subjectModal');
+          } else {
+            showToast('Subject already exists', 'error');
+          }
+        });
+        document.querySelectorAll('[data-delete-subject]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const name = btn.dataset.deleteSubject;
+            if (confirm(`Delete subject "${name}"?`)) {
+              AppState.deleteSubject(name);
+              showToast('Subject deleted', 'success');
+              openModal('subjectModal');
+            }
+          });
+        });
+      } else if (type === 'classModal') {
+        document.getElementById('addClassBtn')?.addEventListener('click', () => {
+          const nameInput = document.getElementById('newClassNameInput');
+          const studentsInput = document.getElementById('newClassStudentsInput');
+          const name = nameInput.value.trim();
+          const total = parseInt(studentsInput.value) || 30;
+          if (!name) { showToast('Enter class name', 'error'); return; }
+          if (AppState.addClass(name, total)) {
+            showToast('Class added!', 'success');
+            openModal('classModal');
+          } else {
+            showToast('Class already exists', 'error');
+          }
+        });
+        document.querySelectorAll('[data-delete-class]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.dataset.deleteClass;
+            if (confirm('Delete this class and its inspection records?')) {
+              AppState.deleteClass(id);
+              showToast('Class deleted', 'success');
+              openModal('classModal');
+            }
+          });
+        });
       }
     }
 
-    function saveState() {
-      localStorage.setItem('eduTrackProState', JSON.stringify({
-        teachers: APP_STATE.teachers,
-        subjects: APP_STATE.subjects,
-        inspections: APP_STATE.inspections,
-        totalStudents: APP_STATE.totalStudents
-      }));
-    }
+    // =====================================================
+    // INSPECTION MODAL
+    // =====================================================
+    let inspectionCheckedSet = new Set();
+    let inspectionTotalStudents = 0;
 
-    // ============================================
-    // TEACHER CRUD
-    // ============================================
-    function addTeacher() {
-      const input = document.getElementById('teacherName');
-      const name = input.value.trim();
+    function openInspectionModal() {
+      closeModal();
+      inspectionCheckedSet = new Set();
+      const container = document.getElementById('modalContainer');
       
-      if (!name) {
-        showToast('Please enter a teacher name', 'error');
-        input.focus();
-        return;
-      }
+      const classOptions = AppState.classes.map(c => `<option value="${c.id}">${escapeHtml(c.name)} (${c.totalStudents} students)</option>`).join('');
+      const teacherOptions = AppState.teachers.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+      const subjectOptions = AppState.subjects.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
       
-      if (APP_STATE.teachers.some(t => t.toLowerCase() === name.toLowerCase())) {
-        showToast('Teacher already exists', 'error');
-        return;
-      }
-      
-      APP_STATE.teachers.push(name);
-      input.value = '';
-      input.focus();
-      updateTeacherList();
-      updateSelectDropdowns();
-      saveState();
-      showToast(`Teacher "${name}" added`, 'success');
-    }
-
-    function deleteTeacher(name) {
-      if (confirm(`Delete teacher "${name}"? This will also remove their inspection records.`)) {
-        APP_STATE.teachers = APP_STATE.teachers.filter(t => t !== name);
-        APP_STATE.inspections = APP_STATE.inspections.filter(i => i.teacher !== name);
-        updateTeacherList();
-        updateSelectDropdowns();
-        updateReportPreview();
-        saveState();
-        showToast(`Teacher "${name}" deleted`, 'success');
-      }
-    }
-
-    function updateTeacherList() {
-      const container = document.getElementById('teacherList');
-      if (APP_STATE.teachers.length === 0) {
-        container.innerHTML = '<div style="padding: 1rem; text-align: center; color: #94a3b8; font-size: 0.85rem;">No teachers added</div>';
-        return;
-      }
-      
-      container.innerHTML = APP_STATE.teachers.map(teacher => `
-        <div class="list-item">
-          <div class="list-item-info">
-            <i class="fas fa-user-circle"></i>
-            <span>${escapeHtml(teacher)}</span>
+      container.innerHTML = `
+        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+          <div class="modal-panel" style="max-width:750px;">
+            <div class="modal-header">
+              <h2><i class="fas fa-clipboard-check"></i> Record Inspection</h2>
+              <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-row">
+                <div class="form-group" style="flex:1;">
+                  <label class="form-label">Class</label>
+                  <select class="form-select" id="inspectClass" onchange="loadInspectionGrid()">
+                    <option value="">-- Select Class --</option>
+                    ${classOptions}
+                  </select>
+                </div>
+                <div class="form-group" style="flex:1;">
+                  <label class="form-label">Teacher</label>
+                  <select class="form-select" id="inspectTeacher">
+                    <option value="">-- Select Teacher --</option>
+                    ${teacherOptions}
+                  </select>
+                </div>
+                <div class="form-group" style="flex:1;">
+                  <label class="form-label">Subject</label>
+                  <select class="form-select" id="inspectSubject">
+                    <option value="">-- Select Subject --</option>
+                    ${subjectOptions}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-input" id="inspectDate" value="${new Date().toISOString().split('T')[0]}">
+              </div>
+              <div id="inspectionGridArea">
+                <div class="empty-state"><i class="fas fa-arrow-up"></i><p>Select a class to load student checkboxes</p></div>
+              </div>
+              <div class="inspection-stats" id="inspectionStats" style="display:none;">
+                <div class="inspect-stat checked-stat"><span class="stat-num" id="inspCheckedNum">0</span>Checked</div>
+                <div class="inspect-stat unchecked-stat"><span class="stat-num" id="inspUncheckedNum">0</span>Unchecked</div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+              <button class="btn btn-success" id="recordInspectionBtn"><i class="fas fa-save"></i> Record Inspection</button>
+            </div>
           </div>
-          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); deleteTeacher('${escapeHtml(teacher).replace(/'/g, "\\'")}')" aria-label="Delete ${escapeHtml(teacher)}">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
-      `).join('');
+        </div>`;
+      
+      document.getElementById('recordInspectionBtn').addEventListener('click', recordInspectionHandler);
+      currentModal = 'inspectionModal';
     }
 
-    // ============================================
-    // SUBJECT CRUD
-    // ============================================
-    function addSubject() {
-      const input = document.getElementById('subjectName');
-      const name = input.value.trim();
+    function loadInspectionGrid() {
+      const classId = document.getElementById('inspectClass').value;
+      const gridArea = document.getElementById('inspectionGridArea');
+      const statsArea = document.getElementById('inspectionStats');
       
-      if (!name) {
-        showToast('Please enter a subject name', 'error');
-        input.focus();
+      if (!classId) {
+        gridArea.innerHTML = '<div class="empty-state"><i class="fas fa-arrow-up"></i><p>Select a class to load student checkboxes</p></div>';
+        statsArea.style.display = 'none';
         return;
       }
       
-      if (APP_STATE.subjects.some(s => s.toLowerCase() === name.toLowerCase())) {
-        showToast('Subject already exists', 'error');
-        return;
-      }
+      const classData = AppState.getClassById(classId);
+      if (!classData) return;
       
-      APP_STATE.subjects.push(name);
-      input.value = '';
-      input.focus();
-      updateSubjectList();
-      updateSelectDropdowns();
-      saveState();
-      showToast(`Subject "${name}" added`, 'success');
-    }
-
-    function deleteSubject(name) {
-      if (confirm(`Delete subject "${name}"? This will also remove related inspection records.`)) {
-        APP_STATE.subjects = APP_STATE.subjects.filter(s => s !== name);
-        APP_STATE.inspections = APP_STATE.inspections.filter(i => i.subject !== name);
-        updateSubjectList();
-        updateSelectDropdowns();
-        updateReportPreview();
-        saveState();
-        showToast(`Subject "${name}" deleted`, 'success');
-      }
-    }
-
-    function updateSubjectList() {
-      const container = document.getElementById('subjectList');
-      if (APP_STATE.subjects.length === 0) {
-        container.innerHTML = '<div style="padding: 1rem; text-align: center; color: #94a3b8; font-size: 0.85rem;">No subjects added</div>';
-        return;
-      }
+      inspectionTotalStudents = classData.totalStudents;
+      inspectionCheckedSet = new Set();
       
-      container.innerHTML = APP_STATE.subjects.map(subject => `
-        <div class="list-item">
-          <div class="list-item-info">
-            <i class="fas fa-book"></i>
-            <span>${escapeHtml(subject)}</span>
-          </div>
-          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); deleteSubject('${escapeHtml(subject).replace(/'/g, "\\'")}')" aria-label="Delete ${escapeHtml(subject)}">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
-      `).join('');
-    }
-
-    function updateSelectDropdowns() {
-      const teacherSelect = document.getElementById('selectTeacher');
-      const subjectSelect = document.getElementById('selectSubject');
+      gridArea.innerHTML = `
+        <label class="form-label">Student Copies - Click to Check/Uncheck</label>
+        <div class="student-grid" id="studentCheckGrid">
+          ${Array.from({length: classData.totalStudents}, (_, i) => i+1).map(num => `
+            <div class="student-cell" data-roll="${num}">
+              <input type="checkbox" id="stu${num}">
+              <label class="student-card" for="stu${num}">
+                <i class="fas fa-user-graduate student-icon"></i>
+                <span class="student-roll">#${num}</span>
+                <span class="student-check-badge">✓ Done</span>
+              </label>
+            </div>
+          `).join('')}
+        </div>`;
       
-      teacherSelect.innerHTML = APP_STATE.teachers.map(t => 
-        `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`
-      ).join('') || '<option value="">No teachers available</option>';
+      statsArea.style.display = 'grid';
       
-      subjectSelect.innerHTML = APP_STATE.subjects.map(s => 
-        `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`
-      ).join('') || '<option value="">No subjects available</option>';
-    }
-
-    // ============================================
-    // STUDENT GRID - PERFECT CHECKBOX FUNCTIONALITY
-    // ============================================
-    function updateStudentGrid() {
-      const totalInput = document.getElementById('totalStudents');
-      const newTotal = parseInt(totalInput.value) || 30;
-      
-      // Clamp between 1 and 100
-      APP_STATE.totalStudents = Math.min(100, Math.max(1, newTotal));
-      totalInput.value = APP_STATE.totalStudents;
-      
-      // Clear checked set if total changed
-      const grid = document.getElementById('studentGrid');
-      const oldChecked = new Set(APP_STATE.currentChecked);
-      APP_STATE.currentChecked.clear();
-      
-      // Preserve valid checked students
-      oldChecked.forEach(num => {
-        if (num <= APP_STATE.totalStudents) {
-          APP_STATE.currentChecked.add(num);
-        }
+      // Bind click events
+      document.querySelectorAll('#studentCheckGrid .student-cell').forEach(cell => {
+        cell.addEventListener('click', function(e) {
+          const roll = parseInt(this.dataset.roll);
+          const checkbox = this.querySelector('input[type="checkbox"]');
+          checkbox.checked = !checkbox.checked;
+          if (checkbox.checked) {
+            inspectionCheckedSet.add(roll);
+          } else {
+            inspectionCheckedSet.delete(roll);
+          }
+          updateInspectionStats();
+        });
       });
       
-      // Generate grid
-      grid.innerHTML = '';
-      for (let i = 1; i <= APP_STATE.totalStudents; i++) {
-        const studentDiv = document.createElement('div');
-        studentDiv.className = 'student-item';
-        
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.id = `student${i}`;
-        checkbox.checked = APP_STATE.currentChecked.has(i);
-        
-        const label = document.createElement('label');
-        label.className = 'student-label';
-        label.setAttribute('for', `student${i}`);
-        label.innerHTML = `
-          <span class="student-number">#${i}</span>
-          <span class="student-status">${checkbox.checked ? 'Done' : 'Pending'}</span>
-        `;
-        
-        // Event listener for checkbox changes
-        checkbox.addEventListener('change', function(e) {
-          e.stopPropagation();
-          if (this.checked) {
-            APP_STATE.currentChecked.add(i);
-            label.querySelector('.student-status').textContent = 'Done';
-          } else {
-            APP_STATE.currentChecked.delete(i);
-            label.querySelector('.student-status').textContent = 'Pending';
-          }
-          updateStats();
-        });
-        
-        // Click on the entire item toggles checkbox
-        studentDiv.addEventListener('click', function(e) {
-          e.preventDefault();
-          checkbox.checked = !checkbox.checked;
-          // Trigger change event manually
-          checkbox.dispatchEvent(new Event('change'));
-        });
-        
-        // Prevent label click from double-firing
-        label.addEventListener('click', function(e) {
-          e.preventDefault();
-        });
-        
-        studentDiv.appendChild(checkbox);
-        studentDiv.appendChild(label);
-        grid.appendChild(studentDiv);
-      }
-      
-      updateStats();
+      updateInspectionStats();
     }
 
-    function updateStats() {
-      const checked = APP_STATE.currentChecked.size;
-      const unchecked = APP_STATE.totalStudents - checked;
-      
-      document.getElementById('checkedCount').textContent = checked;
-      document.getElementById('uncheckedCount').textContent = unchecked;
+    function updateInspectionStats() {
+      document.getElementById('inspCheckedNum').textContent = inspectionCheckedSet.size;
+      document.getElementById('inspUncheckedNum').textContent = inspectionTotalStudents - inspectionCheckedSet.size;
     }
 
-    // ============================================
-    // RECORD INSPECTION
-    // ============================================
-    function recordInspection() {
-      const teacherSelect = document.getElementById('selectTeacher');
-      const subjectSelect = document.getElementById('selectSubject');
+    function recordInspectionHandler() {
+      const classId = document.getElementById('inspectClass').value;
+      const teacher = document.getElementById('inspectTeacher').value;
+      const subject = document.getElementById('inspectSubject').value;
+      const date = document.getElementById('inspectDate').value;
       
-      if (!teacherSelect.value || !subjectSelect.value) {
-        showToast('Please add teachers and subjects first', 'error');
+      if (!classId || !teacher || !subject || !date) {
+        showToast('Please fill all fields', 'error');
         return;
       }
       
-      const teacher = teacherSelect.value;
-      const subject = subjectSelect.value;
-      const totalStudents = APP_STATE.totalStudents;
-      const checked = APP_STATE.currentChecked.size;
-      const unchecked = totalStudents - checked;
-      
-      if (checked === 0) {
+      if (inspectionCheckedSet.size === 0) {
         showToast('Please check at least one student copy', 'error');
         return;
       }
       
-      // Calculate complete/incomplete (simulated - in production this would be tracked)
-      const completeChecked = Math.floor(checked * 0.8);
-      const incompleteChecked = checked - completeChecked;
-      
-      const inspection = {
-        id: Date.now(),
-        date: new Date().toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'short', 
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        }),
+      AppState.recordInspection({
+        date,
+        classId,
         teacher,
         subject,
-        totalStudents,
-        checked,
-        unchecked,
-        complete: completeChecked,
-        incomplete: incompleteChecked,
-        outcome: calculateOutcome(checked, totalStudents),
-        grade: calculateGrade(checked, totalStudents),
-        remarks: generateRemarks(checked, totalStudents, teacher)
-      };
+        checkedSet: inspectionCheckedSet,
+        totalStudents: inspectionTotalStudents
+      });
       
-      APP_STATE.inspections.unshift(inspection); // Add to beginning
-      updateReportPreview();
-      saveState();
       showToast('Inspection recorded successfully!', 'success');
+      closeModal();
+    }
+
+    // =====================================================
+    // REPORT MODAL
+    // =====================================================
+    function openReportModal() {
+      closeModal();
+      const container = document.getElementById('modalContainer');
+      const grouped = AppState.getInspectionsByDate();
+      const dates = Object.keys(grouped);
       
-      // Reset for next entry
-      APP_STATE.currentChecked.clear();
-      updateStudentGrid();
-    }
-
-    function calculateOutcome(checked, total) {
-      return Math.round((checked / total) * 100);
-    }
-
-    function calculateGrade(checked, total) {
-      const percentage = calculateOutcome(checked, total);
-      if (percentage >= 90) return 'A';
-      if (percentage >= 80) return 'B';
-      if (percentage >= 70) return 'C';
-      if (percentage >= 60) return 'D';
-      return 'F';
-    }
-
-    function generateRemarks(checked, total, teacher) {
-      const percentage = calculateOutcome(checked, total);
-      if (percentage >= 90) return 'Excellent work! Outstanding performance.';
-      if (percentage >= 80) return 'Very good. Minor improvements suggested.';
-      if (percentage >= 70) return 'Satisfactory. Regular checking needed.';
-      if (percentage >= 60) return 'Needs improvement. Increase monitoring.';
-      return `Critical: Immediate action required for ${teacher}.`;
-    }
-
-    // ============================================
-    // REPORT PREVIEW
-    // ============================================
-    function updateReportPreview() {
-      const preview = document.getElementById('reportPreview');
+      let html = `
+        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+          <div class="modal-panel" style="max-width:900px;">
+            <div class="modal-header">
+              <h2><i class="fas fa-file-alt"></i> Inspection Report</h2>
+              <div style="display:flex;gap:0.5rem;">
+                <button class="btn btn-success btn-sm" id="generatePDFBtn"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+              </div>
+            </div>
+            <div class="modal-body" id="reportContent">`;
       
-      if (APP_STATE.inspections.length === 0) {
-        preview.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-clipboard-list"></i>
-            <p>No inspections recorded yet</p>
-            <small>Use the admin panel to record inspections</small>
-          </div>`;
-        return;
+      if (dates.length === 0) {
+        html += '<div class="empty-state"><i class="fas fa-clipboard-list"></i><p>No inspection records found</p></div>';
+      } else {
+        dates.forEach(date => {
+          const inspections = grouped[date];
+          html += `
+            <div class="date-group">
+              <div class="date-header" onclick="toggleDateBody(this)">
+                <span><i class="fas fa-calendar-alt"></i> ${date}</span>
+                <span style="font-size:0.8rem;color:var(--green-600);">${inspections.length} record(s) <i class="fas fa-chevron-down"></i></span>
+              </div>
+              <div class="date-body">
+                <div class="report-table-wrap">
+                  <table class="report-table">
+                    <thead>
+                      <tr><th>Class</th><th>Teacher</th><th>Subject</th><th>Total</th><th>Checked</th><th>Unchecked</th><th>Outcome</th><th>Grade</th><th>Remarks</th></tr>
+                    </thead>
+                    <tbody>
+                      ${inspections.map(inv => {
+                        const cls = AppState.getClassById(inv.classId);
+                        const className = cls ? cls.name : 'Unknown';
+                        const checked = inv.checkedSet.length;
+                        const unchecked = inv.totalStudents - checked;
+                        const outcome = Math.round((checked / inv.totalStudents) * 100);
+                        const grade = outcome >= 90 ? 'A' : outcome >= 80 ? 'B' : outcome >= 70 ? 'C' : outcome >= 60 ? 'D' : 'F';
+                        const remarks = outcome >= 90 ? 'Excellent' : outcome >= 80 ? 'Very Good' : outcome >= 70 ? 'Good' : outcome >= 60 ? 'Needs Improvement' : 'Critical';
+                        return `
+                          <tr>
+                            <td>${escapeHtml(className)}</td>
+                            <td>${escapeHtml(inv.teacher)}</td>
+                            <td>${escapeHtml(inv.subject)}</td>
+                            <td>${inv.totalStudents}</td>
+                            <td style="color:var(--green-600);">${checked}</td>
+                            <td style="color:var(--red-500);">${unchecked}</td>
+                            <td><strong>${outcome}%</strong></td>
+                            <td><span class="grade-badge grade-${grade.toLowerCase()}">${grade}</span></td>
+                            <td style="font-size:0.75rem;">${remarks}</td>
+                          </tr>`;
+                      }).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>`;
+        });
       }
       
-      preview.innerHTML = `
-        <div style="overflow-x: auto;">
-          <table class="preview-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Teacher</th>
-                <th>Subject</th>
-                <th>Total</th>
-                <th>✓</th>
-                <th>✗</th>
-                <th>Outcome</th>
-                <th>Grade</th>
-                <th>Remarks</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${APP_STATE.inspections.map(inv => `
-                <tr>
-                  <td>${inv.date}</td>
-                  <td><strong>${escapeHtml(inv.teacher)}</strong></td>
-                  <td>${escapeHtml(inv.subject)}</td>
-                  <td>${inv.totalStudents}</td>
-                  <td style="color: #10b981;">${inv.checked}</td>
-                  <td style="color: #ef4444;">${inv.unchecked}</td>
-                  <td><strong>${inv.outcome}%</strong></td>
-                  <td><span class="grade-badge grade-${inv.grade.toLowerCase()}">${inv.grade}</span></td>
-                  <td style="font-size: 0.75rem; max-width: 200px;">${escapeHtml(inv.remarks)}</td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
-      `;
+      html += `</div></div></div>`;
+      container.innerHTML = html;
+      
+      document.getElementById('generatePDFBtn')?.addEventListener('click', generatePDF);
+      currentModal = 'reportModal';
     }
 
-    function clearAllRecords() {
-      if (APP_STATE.inspections.length === 0) {
-        showToast('No records to clear', 'info');
-        return;
-      }
-      
-      if (confirm(`Delete all ${APP_STATE.inspections.length} inspection records? This cannot be undone.`)) {
-        APP_STATE.inspections = [];
-        updateReportPreview();
-        saveState();
-        showToast('All records cleared', 'success');
+    function toggleDateBody(header) {
+      const body = header.nextElementSibling;
+      body.classList.toggle('collapsed');
+      const icon = header.querySelector('.fa-chevron-down, .fa-chevron-up');
+      if (body.classList.contains('collapsed')) {
+        icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+      } else {
+        icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
       }
     }
 
-    // ============================================
+    // =====================================================
     // PDF GENERATION
-    // ============================================
+    // =====================================================
     async function generatePDF() {
-      if (APP_STATE.inspections.length === 0) {
-        showToast('No records to generate PDF', 'error');
-        return;
-      }
+      const reportContent = document.getElementById('reportContent');
+      if (!reportContent) return;
       
-      const toast = showToast('Generating PDF...', 'info');
+      // Expand all date bodies for PDF
+      document.querySelectorAll('.date-body.collapsed').forEach(b => b.classList.remove('collapsed'));
+      
+      showToast('Generating PDF...', 'info');
       
       try {
-        const reportElement = document.getElementById('reportPreview');
-        const canvas = await html2canvas(reportElement, {
-          scale: 2,
-          useCORS: true,
-          logging: false,
-          backgroundColor: '#ffffff'
-        });
-        
+        const canvas = await html2canvas(reportContent, { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' });
         const imgData = canvas.toDataURL('image/png');
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('l', 'mm', 'a4');
-        
+        const pdf = new jsPDF('p', 'mm', 'a4');
         const pageWidth = pdf.internal.pageSize.getWidth();
         const pageHeight = pdf.internal.pageSize.getHeight();
         
         // Header
-        pdf.setFillColor(79, 70, 229);
-        pdf.rect(0, 0, pageWidth, 35, 'F');
+        pdf.setFillColor(5, 46, 22);
+        pdf.rect(0, 0, pageWidth, 40, 'F');
         pdf.setTextColor(255, 255, 255);
-        pdf.setFontSize(20);
-        pdf.text('Copies Inspection Report', 15, 18);
+        pdf.setFontSize(18);
+        pdf.text('YOUR SCHOOL NAME', pageWidth/2, 18, { align: 'center' });
         pdf.setFontSize(10);
-        pdf.text(`Generated: ${new Date().toLocaleString()}`, 15, 28);
+        pdf.text('Copy Inspection Report', pageWidth/2, 28, { align: 'center' });
+        pdf.text(`Generated: ${new Date().toLocaleString()}`, pageWidth/2, 35, { align: 'center' });
         
-        // Table image
         const imgWidth = pageWidth - 20;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        pdf.addImage(imgData, 'PNG', 10, 40, imgWidth, imgHeight);
-        
-        // Footer
-        pdf.setTextColor(128, 128, 128);
-        pdf.setFontSize(8);
-        pdf.text('EduTrack Pro - Professional Copy Inspection System', 10, pageHeight - 8);
-        pdf.text(`Total Records: ${APP_STATE.inspections.length}`, pageWidth - 50, pageHeight - 8, { align: 'right' });
+        pdf.addImage(imgData, 'PNG', 10, 45, imgWidth, imgHeight);
         
         pdf.save(`Inspection_Report_${new Date().toISOString().split('T')[0]}.pdf`);
-        
-        if (toast) toast.remove();
-        showToast('PDF downloaded successfully!', 'success');
-      } catch (error) {
-        console.error('PDF generation failed:', error);
-        if (toast) toast.remove();
-        showToast('Failed to generate PDF. Please try again.', 'error');
+        showToast('PDF downloaded!', 'success');
+      } catch(e) {
+        console.error('PDF error:', e);
+        showToast('PDF generation failed', 'error');
       }
     }
 
-    // ============================================
+    // =====================================================
     // UTILITY FUNCTIONS
-    // ============================================
+    // =====================================================
     function showToast(message, type = 'info') {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       toast.className = `toast toast-${type}`;
-      
-      const icons = {
-        success: 'fa-check-circle',
-        error: 'fa-exclamation-circle',
-        info: 'fa-info-circle'
-      };
-      
-      toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${message}`;
+      const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+      toast.innerHTML = `<i class="fas ${icons[type]}"></i> ${message}`;
       container.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.3s ease';
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
-      
-      return toast;
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 3000);
     }
 
     function escapeHtml(text) {
@@ -1232,19 +1408,13 @@
       return div.innerHTML;
     }
 
-    // Handle Enter key for inputs
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('teacherName')?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') addTeacher();
-      });
-      
-      document.getElementById('subjectName')?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') addSubject();
-      });
+    // Keyboard support
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
     });
 
-    // Initialize
-    init();
+    // Initialize App
+    AppState.init();
   </script>
 </body>
 </html>

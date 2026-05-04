@@ -561,7 +561,102 @@
       display: block;
     }
 
-    /* Report Table */
+    /* ============================================ */
+    /* PDF REPORT STYLES - Print Preview & PDF Only */
+    /* ============================================ */
+    .pdf-report-container {
+      background: white;
+      padding: 0;
+      font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
+    }
+
+    .pdf-report-header {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 3px double #052e16;
+      margin-bottom: 10px;
+    }
+
+    .pdf-report-header .pdf-school-name {
+      font-size: 22px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #052e16;
+      margin: 0 0 4px 0;
+    }
+
+    .pdf-report-header .pdf-report-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #14532d;
+      margin: 0;
+    }
+
+    .pdf-report-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #d1d5db;
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .pdf-report-meta .meta-label {
+      font-weight: 700;
+      color: #052e16;
+    }
+
+    .pdf-report-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-top: 8px;
+    }
+
+    .pdf-report-table thead th {
+      background: #052e16;
+      color: white;
+      padding: 8px 6px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      text-align: left;
+      border: 1px solid #052e16;
+    }
+
+    .pdf-report-table tbody td {
+      padding: 7px 6px;
+      border: 1px solid #d1d5db;
+      vertical-align: top;
+    }
+
+    .pdf-report-table tbody tr:nth-child(even) {
+      background: #f0fdf4;
+    }
+
+    .pdf-grade-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .pdf-grade-a { background: #bbf7d0; color: #14532d; }
+    .pdf-grade-b { background: #dbeafe; color: #1e3a8a; }
+    .pdf-grade-c { background: #fef3c7; color: #78350f; }
+    .pdf-grade-d { background: #fed7aa; color: #7c2d12; }
+    .pdf-grade-f { background: #fecaca; color: #7f1d1d; }
+
+    /* Screen-only report table (existing) */
     .report-table-wrap {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -698,6 +793,17 @@
     .mt-2 { margin-top: 1.5rem; }
     .gap-1 { gap: 0.75rem; }
     .flex-wrap { flex-wrap: wrap; }
+
+    /* Hidden PDF template for generation */
+    .pdf-template-hidden {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      width: 800px;
+      background: white;
+      padding: 30px;
+      z-index: -1;
+    }
   </style>
 </head>
 <body>
@@ -767,6 +873,9 @@
     </div>
   </div>
 
+  <!-- Hidden PDF template container -->
+  <div class="pdf-template-hidden" id="pdfTemplateContainer"></div>
+
   <!-- Dynamic Modals Container -->
   <div id="modalContainer"></div>
 
@@ -784,7 +893,7 @@
       inspections: [],    // { id, date, classId, teacher, subject, checkedSet[], totalStudents }
       
       init() {
-        const saved = localStorage.getItem('yourSchoolInspection');
+        const saved = localStorage.getItem('yourSchoolInspectionV2');
         if (saved) {
           try {
             const data = JSON.parse(saved);
@@ -794,7 +903,6 @@
             this.inspections = data.inspections || [];
           } catch(e) { console.warn('State load failed'); }
         }
-        // Defaults if empty
         if (this.teachers.length === 0) {
           this.teachers = ['Mr. Ahmad Khan', 'Ms. Fatima Zahra', 'Mr. Bilal Siddique', 'Ms. Ayesha Noor'];
         }
@@ -812,7 +920,7 @@
       },
 
       save() {
-        localStorage.setItem('yourSchoolInspection', JSON.stringify({
+        localStorage.setItem('yourSchoolInspectionV2', JSON.stringify({
           teachers: this.teachers,
           subjects: this.subjects,
           classes: this.classes,
@@ -879,20 +987,17 @@
         return this.classes.find(c => c.id === id) || null;
       },
 
-      // Record or merge inspection for the same date
       recordInspection(inspectionData) {
         const { date, classId, teacher, subject, checkedSet, totalStudents } = inspectionData;
-        // Find existing inspection for same date, class, teacher, subject
         const existingIndex = this.inspections.findIndex(i => 
           i.date === date && i.classId === classId && i.teacher === teacher && i.subject === subject
         );
 
         if (existingIndex >= 0) {
-          // Merge: combine checked sets
           const existing = this.inspections[existingIndex];
           const mergedSet = new Set([...existing.checkedSet, ...checkedSet]);
           existing.checkedSet = Array.from(mergedSet);
-          existing.totalStudents = totalStudents; // update total if changed
+          existing.totalStudents = totalStudents;
           this.inspections[existingIndex] = existing;
         } else {
           this.inspections.push({
@@ -915,12 +1020,15 @@
           if (!grouped[inv.date]) grouped[inv.date] = [];
           grouped[inv.date].push(inv);
         });
-        // Sort dates descending
         const sorted = {};
         Object.keys(grouped).sort((a,b) => new Date(b) - new Date(a)).forEach(date => {
           sorted[date] = grouped[date];
         });
         return sorted;
+      },
+
+      getAllInspectionsFlat() {
+        return [...this.inspections].sort((a,b) => new Date(b.date) - new Date(a.date));
       }
     };
 
@@ -1039,7 +1147,7 @@
           if (!name) { showToast('Enter teacher name', 'error'); return; }
           if (AppState.addTeacher(name)) {
             showToast('Teacher added!', 'success');
-            openModal('teacherModal'); // refresh
+            openModal('teacherModal');
           } else {
             showToast('Teacher already exists', 'error');
           }
@@ -1209,7 +1317,6 @@
       
       statsArea.style.display = 'grid';
       
-      // Bind click events
       document.querySelectorAll('#studentCheckGrid .student-cell').forEach(cell => {
         cell.addEventListener('click', function(e) {
           const roll = parseInt(this.dataset.roll);
@@ -1262,7 +1369,7 @@
     }
 
     // =====================================================
-    // REPORT MODAL
+    // REPORT MODAL (Screen View)
     // =====================================================
     function openReportModal() {
       closeModal();
@@ -1276,7 +1383,7 @@
             <div class="modal-header">
               <h2><i class="fas fa-file-alt"></i> Inspection Report</h2>
               <div style="display:flex;gap:0.5rem;">
-                <button class="btn btn-success btn-sm" id="generatePDFBtn"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="btn btn-success btn-sm" id="generatePDFBtn"><i class="fas fa-file-pdf"></i> Generate PDF</button>
                 <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
               </div>
             </div>
@@ -1300,27 +1407,7 @@
                       <tr><th>Class</th><th>Teacher</th><th>Subject</th><th>Total</th><th>Checked</th><th>Unchecked</th><th>Outcome</th><th>Grade</th><th>Remarks</th></tr>
                     </thead>
                     <tbody>
-                      ${inspections.map(inv => {
-                        const cls = AppState.getClassById(inv.classId);
-                        const className = cls ? cls.name : 'Unknown';
-                        const checked = inv.checkedSet.length;
-                        const unchecked = inv.totalStudents - checked;
-                        const outcome = Math.round((checked / inv.totalStudents) * 100);
-                        const grade = outcome >= 90 ? 'A' : outcome >= 80 ? 'B' : outcome >= 70 ? 'C' : outcome >= 60 ? 'D' : 'F';
-                        const remarks = outcome >= 90 ? 'Excellent' : outcome >= 80 ? 'Very Good' : outcome >= 70 ? 'Good' : outcome >= 60 ? 'Needs Improvement' : 'Critical';
-                        return `
-                          <tr>
-                            <td>${escapeHtml(className)}</td>
-                            <td>${escapeHtml(inv.teacher)}</td>
-                            <td>${escapeHtml(inv.subject)}</td>
-                            <td>${inv.totalStudents}</td>
-                            <td style="color:var(--green-600);">${checked}</td>
-                            <td style="color:var(--red-500);">${unchecked}</td>
-                            <td><strong>${outcome}%</strong></td>
-                            <td><span class="grade-badge grade-${grade.toLowerCase()}">${grade}</span></td>
-                            <td style="font-size:0.75rem;">${remarks}</td>
-                          </tr>`;
-                      }).join('')}
+                      ${inspections.map(inv => buildInspectionRow(inv)).join('')}
                     </tbody>
                   </table>
                 </div>
@@ -1336,6 +1423,28 @@
       currentModal = 'reportModal';
     }
 
+    function buildInspectionRow(inv) {
+      const cls = AppState.getClassById(inv.classId);
+      const className = cls ? cls.name : 'Unknown';
+      const checked = inv.checkedSet.length;
+      const unchecked = inv.totalStudents - checked;
+      const outcome = Math.round((checked / inv.totalStudents) * 100);
+      const grade = outcome >= 90 ? 'A' : outcome >= 80 ? 'B' : outcome >= 70 ? 'C' : outcome >= 60 ? 'D' : 'F';
+      const remarks = outcome >= 90 ? 'Excellent' : outcome >= 80 ? 'Very Good' : outcome >= 70 ? 'Good' : outcome >= 60 ? 'Needs Improvement' : 'Critical';
+      return `
+        <tr>
+          <td>${escapeHtml(className)}</td>
+          <td>${escapeHtml(inv.teacher)}</td>
+          <td>${escapeHtml(inv.subject)}</td>
+          <td>${inv.totalStudents}</td>
+          <td style="color:var(--green-600);">${checked}</td>
+          <td style="color:var(--red-500);">${unchecked}</td>
+          <td><strong>${outcome}%</strong></td>
+          <td><span class="grade-badge grade-${grade.toLowerCase()}">${grade}</span></td>
+          <td style="font-size:0.75rem;">${remarks}</td>
+        </tr>`;
+    }
+
     function toggleDateBody(header) {
       const body = header.nextElementSibling;
       body.classList.toggle('collapsed');
@@ -1348,45 +1457,157 @@
     }
 
     // =====================================================
-    // PDF GENERATION
+    // BUILD PDF TEMPLATE HTML
+    // =====================================================
+    function buildPDFTemplateHTML(inspections, className, date) {
+      if (!inspections || inspections.length === 0) return '';
+      
+      const displayDate = date || inspections[0].date;
+      const displayClass = className || 'All Classes';
+      
+      let rows = '';
+      inspections.forEach(inv => {
+        const cls = AppState.getClassById(inv.classId);
+        const clsName = cls ? cls.name : 'Unknown';
+        const checked = inv.checkedSet.length;
+        const unchecked = inv.totalStudents - checked;
+        const outcome = Math.round((checked / inv.totalStudents) * 100);
+        const grade = outcome >= 90 ? 'A' : outcome >= 80 ? 'B' : outcome >= 70 ? 'C' : outcome >= 60 ? 'D' : 'F';
+        const remarks = outcome >= 90 ? 'Excellent' : outcome >= 80 ? 'Very Good' : outcome >= 70 ? 'Good' : outcome >= 60 ? 'Needs Improvement' : 'Critical';
+        const gradeClass = `pdf-grade-${grade.toLowerCase()}`;
+        
+        rows += `
+          <tr>
+            <td>${escapeHtml(clsName)}</td>
+            <td>${escapeHtml(inv.teacher)}</td>
+            <td>${escapeHtml(inv.subject)}</td>
+            <td>${inv.totalStudents}</td>
+            <td>${checked}</td>
+            <td>${unchecked}</td>
+            <td><strong>${outcome}%</strong></td>
+            <td><span class="pdf-grade-badge ${gradeClass}">${grade}</span></td>
+            <td>${remarks}</td>
+          </tr>`;
+      });
+      
+      return `
+        <div class="pdf-report-container">
+          <div class="pdf-report-header">
+            <div class="pdf-school-name">YOUR SCHOOL NAME</div>
+            <div class="pdf-report-title">COPIES INSPECTION REPORT SUMMARY</div>
+          </div>
+          <div class="pdf-report-meta">
+            <span><span class="meta-label">Class:</span> ${escapeHtml(displayClass)}</span>
+            <span><span class="meta-label">Date:</span> ${displayDate}</span>
+          </div>
+          <table class="pdf-report-table">
+            <thead>
+              <tr>
+                <th>Class</th>
+                <th>Teacher</th>
+                <th>Subject</th>
+                <th>Total Students</th>
+                <th>Checked</th>
+                <th>Unchecked</th>
+                <th>Outcome %</th>
+                <th>Grade</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        </div>`;
+    }
+
+    // =====================================================
+    // PDF GENERATION - Professional Format
     // =====================================================
     async function generatePDF() {
-      const reportContent = document.getElementById('reportContent');
-      if (!reportContent) return;
+      const grouped = AppState.getInspectionsByDate();
+      const dates = Object.keys(grouped);
       
-      // Expand all date bodies for PDF
-      document.querySelectorAll('.date-body.collapsed').forEach(b => b.classList.remove('collapsed'));
+      if (dates.length === 0) {
+        showToast('No records to generate PDF', 'error');
+        return;
+      }
       
       showToast('Generating PDF...', 'info');
       
+      // Build complete PDF HTML for all dates
+      let fullPDFHTML = '';
+      dates.forEach(date => {
+        const inspections = grouped[date];
+        // Get unique class names for this date
+        const classNames = [...new Set(inspections.map(inv => {
+          const cls = AppState.getClassById(inv.classId);
+          return cls ? cls.name : 'Unknown';
+        }))];
+        const classNameDisplay = classNames.join(', ');
+        
+        fullPDFHTML += buildPDFTemplateHTML(inspections, classNameDisplay, date);
+        fullPDFHTML += '<div style="height:20px;"></div>'; // spacer between date sections
+      });
+      
+      // Place in hidden container
+      const pdfContainer = document.getElementById('pdfTemplateContainer');
+      pdfContainer.innerHTML = fullPDFHTML;
+      pdfContainer.style.left = '0';
+      pdfContainer.style.top = '0';
+      pdfContainer.style.zIndex = '-1';
+      pdfContainer.style.position = 'fixed';
+      
+      // Wait for render
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
       try {
-        const canvas = await html2canvas(reportContent, { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' });
+        const canvas = await html2canvas(pdfContainer, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          backgroundColor: '#ffffff',
+          width: pdfContainer.scrollWidth,
+          height: pdfContainer.scrollHeight
+        });
+        
         const imgData = canvas.toDataURL('image/png');
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
+        
         const pageWidth = pdf.internal.pageSize.getWidth();
         const pageHeight = pdf.internal.pageSize.getHeight();
-        
-        // Header
-        pdf.setFillColor(5, 46, 22);
-        pdf.rect(0, 0, pageWidth, 40, 'F');
-        pdf.setTextColor(255, 255, 255);
-        pdf.setFontSize(18);
-        pdf.text('YOUR SCHOOL NAME', pageWidth/2, 18, { align: 'center' });
-        pdf.setFontSize(10);
-        pdf.text('Copy Inspection Report', pageWidth/2, 28, { align: 'center' });
-        pdf.text(`Generated: ${new Date().toLocaleString()}`, pageWidth/2, 35, { align: 'center' });
-        
-        const imgWidth = pageWidth - 20;
+        const imgWidth = pageWidth - 16;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        pdf.addImage(imgData, 'PNG', 10, 45, imgWidth, imgHeight);
+        
+        // Add image to PDF
+        let heightLeft = imgHeight;
+        let position = 8;
+        let page = 1;
+        
+        pdf.addImage(imgData, 'PNG', 8, position, imgWidth, imgHeight);
+        heightLeft -= (pageHeight - 16);
+        
+        while (heightLeft > 0) {
+          position = -(pageHeight * page - 16);
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 8, position, imgWidth, imgHeight);
+          heightLeft -= (pageHeight - 16);
+          page++;
+        }
         
         pdf.save(`Inspection_Report_${new Date().toISOString().split('T')[0]}.pdf`);
-        showToast('PDF downloaded!', 'success');
+        showToast('PDF downloaded successfully!', 'success');
       } catch(e) {
         console.error('PDF error:', e);
         showToast('PDF generation failed', 'error');
       }
+      
+      // Hide the template container again
+      pdfContainer.style.left = '-9999px';
+      pdfContainer.style.top = '0';
+      pdfContainer.style.position = 'absolute';
+      pdfContainer.innerHTML = '';
     }
 
     // =====================================================
@@ -1408,7 +1629,6 @@
       return div.innerHTML;
     }
 
-    // Keyboard support
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });

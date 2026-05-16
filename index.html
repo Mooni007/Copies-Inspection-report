@@ -6,7 +6,7 @@
   <title>Al Badar Public School | Copy Inspection System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
   </script>
@@ -107,13 +107,8 @@
     }
 
     @media (max-width: 640px) {
-      .school-name {
-        font-size: 1rem;
-        letter-spacing: 1px;
-      }
-      .school-subtitle {
-        font-size: 0.7rem;
-      }
+      .school-name { font-size: 1rem; letter-spacing: 1px; }
+      .school-subtitle { font-size: 0.7rem; }
     }
 
     .dashboard-grid {
@@ -123,13 +118,8 @@
     }
 
     @media (max-width: 640px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-      .app-wrapper {
-        padding: 0.75rem;
-        gap: 1rem;
-      }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .app-wrapper { padding: 0.75rem; gap: 1rem; }
     }
 
     .dash-card {
@@ -140,870 +130,161 @@
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       border: 2px solid transparent;
-      position: relative;
-      overflow: hidden;
       display: flex;
       align-items: center;
       gap: 1.25rem;
       min-height: 110px;
     }
+    .dash-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); border-color: var(--green-400); }
+    .dash-card:active { transform: scale(0.98); }
+    .dash-card-icon { width: 56px; height: 56px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; }
+    .dash-card-icon.teachers { background: #dcfce7; color: var(--green-700); }
+    .dash-card-icon.subjects { background: #dbeafe; color: #1d4ed8; }
+    .dash-card-icon.classes { background: #fef3c7; color: #b45309; }
+    .dash-card-icon.inspection { background: #fce7f3; color: #be185d; }
+    .dash-card-icon.reports { background: #e0e7ff; color: #4338ca; }
+    .dash-card-content { flex: 1; min-width: 0; }
+    .dash-card-content h3 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-500); margin-bottom: 0.25rem; }
+    .dash-card-content .card-count { font-size: 1.8rem; font-weight: 800; color: var(--gray-900); line-height: 1; }
+    .dash-card-content .card-desc { font-size: 0.75rem; color: var(--gray-500); margin-top: 0.2rem; }
+    .dash-card-arrow { color: var(--gray-400); font-size: 1.2rem; transition: transform 0.3s; }
+    .dash-card:hover .dash-card-arrow { transform: translateX(4px); color: var(--green-600); }
 
-    .dash-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-xl);
-      border-color: var(--green-400);
-    }
-
-    .dash-card:active {
-      transform: scale(0.98);
-    }
-
-    .dash-card-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: var(--radius);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      flex-shrink: 0;
-    }
-
-    .dash-card-icon.teachers {
-      background: #dcfce7;
-      color: var(--green-700);
-    }
-    .dash-card-icon.subjects {
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-    .dash-card-icon.classes {
-      background: #fef3c7;
-      color: #b45309;
-    }
-    .dash-card-icon.inspection {
-      background: #fce7f3;
-      color: #be185d;
-    }
-    .dash-card-icon.reports {
-      background: #e0e7ff;
-      color: #4338ca;
-    }
-
-    .dash-card-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .dash-card-content h3 {
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--gray-500);
-      margin-bottom: 0.25rem;
-    }
-
-    .dash-card-content .card-count {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--gray-900);
-      line-height: 1;
-    }
-
-    .dash-card-content .card-desc {
-      font-size: 0.75rem;
-      color: var(--gray-500);
-      margin-top: 0.2rem;
-    }
-
-    .dash-card-arrow {
-      color: var(--gray-400);
-      font-size: 1.2rem;
-      transition: transform 0.3s;
-    }
-
-    .dash-card:hover .dash-card-arrow {
-      transform: translateX(4px);
-      color: var(--green-600);
-    }
-
-    /* Modal Overlay */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
-    .modal-panel {
-      background: var(--white);
-      border-radius: var(--radius-2xl);
-      width: 100%;
-      max-width: 700px;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow: var(--shadow-xl);
-      animation: slideUp 0.3s ease;
-    }
-
-    .modal-panel-sm {
-      max-width: 480px;
-    }
-
-    @keyframes slideUp {
-      from {
-        transform: translateY(20px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .modal-panel {
-        max-width: 100%;
-        max-height: 90vh;
-        border-radius: var(--radius-xl);
-      }
-    }
-
-    .modal-header {
-      padding: 1.25rem 1.5rem;
-      border-bottom: 2px solid var(--gray-100);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      background: var(--white);
-      z-index: 10;
-      border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
-    }
-
-    .modal-header h2 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--gray-900);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .modal-header h2 i {
-      color: var(--green-600);
-    }
-
-    .modal-close {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: none;
-      background: var(--gray-100);
-      cursor: pointer;
-      font-size: 1rem;
-      color: var(--gray-600);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .modal-close:hover {
-      background: var(--red-100);
-      color: var(--red-600);
-    }
-
-    .modal-body {
-      padding: 1.5rem;
-    }
-
-    .modal-footer {
-      padding: 1rem 1.5rem;
-      border-top: 2px solid var(--gray-100);
-      display: flex;
-      gap: 0.75rem;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-    }
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal-panel { background: var(--white); border-radius: var(--radius-2xl); width: 100%; max-width: 700px; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-xl); animation: slideUp 0.3s ease; }
+    .modal-panel-lg { max-width: 900px; }
+    .modal-panel-sm { max-width: 500px; }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @media (max-width: 640px) { .modal-panel { max-width: 100%; max-height: 90vh; border-radius: var(--radius-xl); } }
+    .modal-header { padding: 1.25rem 1.5rem; border-bottom: 2px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--white); z-index: 10; border-radius: var(--radius-2xl) var(--radius-2xl) 0 0; }
+    .modal-header h2 { font-size: 1.2rem; font-weight: 700; color: var(--gray-900); display: flex; align-items: center; gap: 0.5rem; }
+    .modal-header h2 i { color: var(--green-600); }
+    .modal-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--gray-100); cursor: pointer; font-size: 1rem; color: var(--gray-600); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .modal-close:hover { background: var(--red-100); color: var(--red-600); }
+    .modal-body { padding: 1.5rem; }
+    .modal-footer { padding: 1rem 1.5rem; border-top: 2px solid var(--gray-100); display: flex; gap: 0.75rem; justify-content: flex-end; flex-wrap: wrap; }
 
     /* Form */
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-label {
-      display: block;
-      font-weight: 700;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--gray-600);
-      margin-bottom: 0.4rem;
-    }
-
-    .form-input,
-    .form-select,
-    .form-textarea {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      border: 2px solid var(--gray-200);
-      border-radius: var(--radius);
-      font-size: 0.9rem;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.2s;
-      background: var(--gray-50);
-      color: var(--gray-900);
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    .form-textarea {
-      resize: vertical;
-      min-height: 90px;
-    }
-
-    .form-input:focus,
-    .form-select:focus,
-    .form-textarea:focus {
-      outline: none;
-      border-color: var(--green-500);
-      background: var(--white);
-      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
-    }
-
-    .form-select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      padding-right: 2.5rem;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    @media (max-width: 500px) {
-      .form-row {
-        flex-direction: column;
-      }
-    }
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gray-600); margin-bottom: 0.4rem; }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 0.8rem 1rem; border: 2px solid var(--gray-200); border-radius: var(--radius); font-size: 0.9rem; font-family: 'Inter', sans-serif; transition: all 0.2s; background: var(--gray-50); color: var(--gray-900); -webkit-appearance: none; appearance: none; }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--green-500); background: var(--white); box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15); }
+    .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; }
+    .form-row { display: flex; gap: 0.75rem; }
+    @media (max-width: 500px) { .form-row { flex-direction: column; } }
 
     /* Buttons */
-    .btn {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: var(--radius);
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: 'Inter', sans-serif;
-      white-space: nowrap;
-      min-height: 44px;
-      justify-content: center;
-    }
-
-    .btn:active {
-      transform: scale(0.96);
-    }
-
-    .btn-primary {
-      background: var(--green-700);
-      color: white;
-      box-shadow: 0 2px 8px rgba(21, 128, 61, 0.3);
-    }
-    .btn-primary:hover {
-      background: var(--green-800);
-    }
-
-    .btn-success {
-      background: var(--green-600);
-      color: white;
-    }
-    .btn-success:hover {
-      background: var(--green-700);
-    }
-
-    .btn-danger {
-      background: var(--red-100);
-      color: var(--red-600);
-    }
-    .btn-danger:hover {
-      background: #fecaca;
-    }
-
-    .btn-outline {
-      background: var(--white);
-      color: var(--green-700);
-      border: 2px solid var(--green-300);
-    }
-    .btn-outline:hover {
-      background: var(--green-50);
-    }
-
-    .btn-sm {
-      padding: 0.45rem 0.85rem;
-      font-size: 0.78rem;
-      min-height: 34px;
-    }
-
-    .btn-block {
-      width: 100%;
-    }
+    .btn { padding: 0.75rem 1.5rem; border: none; border-radius: var(--radius); font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'Inter', sans-serif; white-space: nowrap; min-height: 44px; justify-content: center; }
+    .btn:active { transform: scale(0.96); }
+    .btn-primary { background: var(--green-700); color: white; box-shadow: 0 2px 8px rgba(21, 128, 61, 0.3); }
+    .btn-primary:hover { background: var(--green-800); }
+    .btn-success { background: var(--green-600); color: white; }
+    .btn-success:hover { background: var(--green-700); }
+    .btn-danger { background: var(--red-100); color: var(--red-600); }
+    .btn-danger:hover { background: #fecaca; }
+    .btn-outline { background: var(--white); color: var(--green-700); border: 2px solid var(--green-300); }
+    .btn-outline:hover { background: var(--green-50); }
+    .btn-sm { padding: 0.45rem 0.85rem; font-size: 0.78rem; min-height: 34px; }
+    .btn-block { width: 100%; }
 
     /* List */
-    .list-container {
-      max-height: 280px;
-      overflow-y: auto;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius);
-      background: var(--gray-50);
-    }
+    .list-container { max-height: 280px; overflow-y: auto; border: 1px solid var(--gray-200); border-radius: var(--radius); background: var(--gray-50); }
+    .list-item { display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 1rem; border-bottom: 1px solid var(--gray-100); background: var(--white); transition: background 0.15s; }
+    .list-item:hover { background: var(--green-50); }
+    .list-item:last-child { border-bottom: none; }
+    .list-item-info { display: flex; align-items: center; gap: 0.6rem; font-weight: 500; font-size: 0.9rem; flex: 1; }
+    .list-item-info i { color: var(--green-600); }
 
-    .list-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.7rem 1rem;
-      border-bottom: 1px solid var(--gray-100);
-      background: var(--white);
-      transition: background 0.15s;
-    }
-
-    .list-item:hover {
-      background: var(--green-50);
-    }
-    .list-item:last-child {
-      border-bottom: none;
-    }
-
-    .list-item-info {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-weight: 500;
-      font-size: 0.9rem;
-      flex: 1;
-    }
-
-    .list-item-info i {
-      color: var(--green-600);
-    }
-
-    /* Student Grid */
-    .student-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-      gap: 0.6rem;
-      padding: 0.75rem;
-      background: var(--gray-50);
-      border-radius: var(--radius);
-      border: 1px solid var(--gray-200);
-      max-height: 320px;
-      overflow-y: auto;
-    }
-
-    @media (max-width: 400px) {
-      .student-grid {
-        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-        gap: 0.4rem;
-      }
-    }
-
-    .student-cell {
-      position: relative;
-      cursor: pointer;
-    }
-
-    .student-cell input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-      width: 0;
-      height: 0;
-    }
-
-    .student-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.7rem 0.3rem;
-      background: var(--white);
-      border: 2px solid var(--gray-200);
-      border-radius: var(--radius);
-      transition: all 0.2s;
-      text-align: center;
-    }
-
-    .student-card:hover {
-      border-color: var(--green-400);
-      background: var(--green-50);
-    }
-
-    .student-cell input:checked+.student-card {
-      background: var(--green-100);
-      border-color: var(--green-500);
-      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
-    }
-
-    .student-icon {
-      font-size: 1.5rem;
-      color: var(--gray-400);
-      transition: color 0.2s;
-    }
-
-    .student-cell input:checked+.student-card .student-icon {
-      color: var(--green-600);
-    }
-
-    .student-roll {
-      font-weight: 700;
-      font-size: 0.8rem;
-      color: var(--gray-700);
-    }
-
-    .student-check-badge {
-      display: none;
-      font-size: 0.6rem;
-      color: var(--green-700);
-      font-weight: 700;
-    }
-
-    .student-cell input:checked+.student-card .student-check-badge {
-      display: block;
-    }
-
-    /* Stats */
-    .inspection-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin: 1rem 0;
-    }
-
-    .inspect-stat {
-      padding: 0.9rem;
-      border-radius: var(--radius);
-      text-align: center;
-      font-weight: 700;
-    }
-
-    .inspect-stat.checked-stat {
-      background: var(--green-100);
-      color: var(--green-800);
-    }
-
-    .inspect-stat.unchecked-stat {
-      background: var(--red-100);
-      color: var(--red-600);
-    }
-
-    .inspect-stat .stat-num {
-      font-size: 1.8rem;
-      display: block;
-    }
-
-    /* PDF Styles */
-    .pdf-report-container {
-      background: white;
-      padding: 0;
-      font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
-    }
-
-    .pdf-report-header {
-      text-align: center;
-      padding: 20px 0;
-      border-bottom: 3px double #052e16;
-      margin-bottom: 10px;
-    }
-
-    .pdf-report-header .pdf-school-name {
-      font-size: 20px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #052e16;
-      margin: 0 0 4px 0;
-    }
-
-    .pdf-report-header .pdf-report-title {
-      font-size: 14px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #14532d;
-      margin: 0;
-    }
-
-    .pdf-report-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #d1d5db;
-      font-size: 12px;
-      font-weight: 600;
-      color: #374151;
-    }
-
-    .pdf-report-meta .meta-label {
-      font-weight: 700;
-      color: #052e16;
-    }
-
-    .pdf-report-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11px;
-      margin-top: 8px;
-    }
-
-    .pdf-report-table thead th {
-      background: #052e16;
-      color: white;
-      padding: 8px 6px;
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 10px;
-      letter-spacing: 0.5px;
-      text-align: left;
-      border: 1px solid #052e16;
-    }
-
-    .pdf-report-table tbody td {
-      padding: 7px 6px;
-      border: 1px solid #d1d5db;
-      vertical-align: top;
-    }
-
-    .pdf-report-table tbody tr:nth-child(even) {
-      background: #f0fdf4;
-    }
-
-    .pdf-grade-badge {
-      display: inline-block;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-weight: 700;
-      font-size: 10px;
-      text-align: center;
-    }
-
-    .pdf-grade-a {
-      background: #bbf7d0;
-      color: #14532d;
-    }
-    .pdf-grade-b {
-      background: #dbeafe;
-      color: #1e3a8a;
-    }
-    .pdf-grade-c {
-      background: #fef3c7;
-      color: #78350f;
-    }
-    .pdf-grade-d {
-      background: #fed7aa;
-      color: #7c2d12;
-    }
-    .pdf-grade-f {
-      background: #fecaca;
-      color: #7f1d1d;
-    }
-
-    /* Screen report table */
-    .report-table-wrap {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border-radius: var(--radius);
-    }
-
-    .report-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-      min-width: 750px;
-    }
-
-    .report-table th {
+    /* Section headings in inspection modal */
+    .section-heading {
       background: var(--green-800);
       color: white;
-      padding: 0.7rem 0.6rem;
-      font-size: 0.7rem;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      text-align: left;
-      position: sticky;
-      top: 0;
+      letter-spacing: 0.8px;
+      margin: 1.25rem 0 0.75rem;
+      text-align: center;
     }
 
-    .report-table td {
-      padding: 0.65rem 0.6rem;
-      border-bottom: 1px solid var(--gray-200);
-    }
+    /* Table in inspection */
+    .entry-table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; font-size: 0.85rem; }
+    .entry-table th { background: var(--green-100); color: var(--green-900); padding: 0.5rem; text-align: center; font-weight: 700; border: 1px solid var(--green-200); }
+    .entry-table td { padding: 0.4rem; text-align: center; border: 1px solid var(--gray-200); }
+    .entry-table input { width: 70px; text-align: center; padding: 0.4rem; border: 2px solid var(--gray-200); border-radius: var(--radius-sm); font-family: 'Inter', sans-serif; font-weight: 600; }
+    .entry-table input:focus { border-color: var(--green-500); outline: none; }
 
-    .report-table tbody tr:hover {
-      background: var(--green-50);
-    }
+    /* Report */
+    .report-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius); }
+    .report-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; min-width: 800px; }
+    .report-table th { background: var(--green-800); color: white; padding: 0.7rem 0.5rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; text-align: left; position: sticky; top: 0; }
+    .report-table td { padding: 0.65rem 0.5rem; border-bottom: 1px solid var(--gray-200); }
+    .report-table tbody tr:hover { background: var(--green-50); }
+    .grade-badge { padding: 0.2rem 0.6rem; border-radius: 20px; font-weight: 700; font-size: 0.7rem; }
+    .grade-a { background: #bbf7d0; color: #14532d; }
+    .grade-b { background: #dbeafe; color: #1e3a8a; }
+    .grade-c { background: #fef3c7; color: #78350f; }
+    .grade-d { background: #fed7aa; color: #7c2d12; }
+    .grade-f { background: #fecaca; color: #7f1d1d; }
 
-    .grade-badge {
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 0.7rem;
-    }
+    .date-group { margin-bottom: 0.75rem; border: 1px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; }
+    .date-header { background: var(--green-50); padding: 0.75rem 1rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--green-900); border-bottom: 1px solid var(--green-200); }
+    .date-header:hover { background: var(--green-100); }
+    .date-body { background: var(--white); }
+    .date-body.collapsed { display: none; }
 
-    .grade-a {
-      background: #bbf7d0;
-      color: #14532d;
-    }
-    .grade-b {
-      background: #dbeafe;
-      color: #1e3a8a;
-    }
-    .grade-c {
-      background: #fef3c7;
-      color: #78350f;
-    }
-    .grade-d {
-      background: #fed7aa;
-      color: #7c2d12;
-    }
-    .grade-f {
-      background: #fecaca;
-      color: #7f1d1d;
-    }
-
-    /* Date accordion */
-    .date-group {
-      margin-bottom: 0.75rem;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .date-header {
-      background: var(--green-50);
-      padding: 0.75rem 1rem;
-      font-weight: 700;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--green-900);
-      border-bottom: 1px solid var(--green-200);
-    }
-
-    .date-header:hover {
-      background: var(--green-100);
-    }
-
-    .date-body {
-      background: var(--white);
-    }
-
-    .date-body.collapsed {
-      display: none;
-    }
+    /* PDF styles */
+    .pdf-report-container { background: white; font-family: 'Inter', 'Helvetica', 'Arial', sans-serif; }
+    .pdf-report-header { text-align: center; padding: 15px 0; border-bottom: 3px double #052e16; margin-bottom: 8px; }
+    .pdf-school-name { font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #052e16; }
+    .pdf-report-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #14532d; margin-top: 4px; }
+    .pdf-report-meta { display: flex; justify-content: space-between; padding: 6px 0; margin-bottom: 8px; border-bottom: 1px solid #d1d5db; font-size: 11px; font-weight: 600; color: #374151; }
+    .pdf-report-table { width: 100%; border-collapse: collapse; font-size: 10px; margin-top: 6px; }
+    .pdf-report-table th { background: #052e16; color: white; padding: 6px 4px; font-weight: 700; text-transform: uppercase; font-size: 9px; letter-spacing: 0.3px; text-align: center; border: 1px solid #052e16; }
+    .pdf-report-table td { padding: 5px 4px; border: 1px solid #d1d5db; text-align: center; }
+    .pdf-report-table tbody tr:nth-child(even) { background: #f0fdf4; }
+    .pdf-urdu-note { text-align: right; direction: rtl; font-family: 'Noto Nastaliq Urdu', serif; font-size: 12px; font-weight: 700; color: #052e16; margin-top: 12px; padding: 8px; border-top: 2px solid #052e16; line-height: 1.8; }
 
     /* Toast */
-    .toast-container {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      max-width: 360px;
-    }
+    .toast-container { position: fixed; top: 1rem; right: 1rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; max-width: 360px; }
+    @media (max-width: 500px) { .toast-container { left: 0.5rem; right: 0.5rem; max-width: none; } }
+    .toast { padding: 0.9rem 1.2rem; border-radius: var(--radius); color: white; font-weight: 600; font-size: 0.85rem; box-shadow: var(--shadow-lg); animation: toastIn 0.3s ease; display: flex; align-items: center; gap: 0.5rem; }
+    .toast-success { background: #059669; }
+    .toast-error { background: #dc2626; }
+    .toast-info { background: #1d4ed8; }
+    @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-    @media (max-width: 500px) {
-      .toast-container {
-        left: 0.5rem;
-        right: 0.5rem;
-        max-width: none;
-      }
-    }
+    .empty-state { text-align: center; padding: 2rem; color: var(--gray-400); }
+    .empty-state i { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; }
+    .text-center { text-align: center; }
+    .mt-1 { margin-top: 1rem; }
 
-    .toast {
-      padding: 0.9rem 1.2rem;
-      border-radius: var(--radius);
-      color: white;
-      font-weight: 600;
-      font-size: 0.85rem;
-      box-shadow: var(--shadow-lg);
-      animation: toastIn 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .toast-success {
-      background: #059669;
-    }
-    .toast-error {
-      background: #dc2626;
-    }
-    .toast-info {
-      background: #1d4ed8;
-    }
-
-    @keyframes toastIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    /* Empty state */
-    .empty-state {
-      text-align: center;
-      padding: 2rem;
-      color: var(--gray-400);
-    }
-    .empty-state i {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-
-    /* Highlight for PDF dropdown */
-    .pdf-date-select {
-      font-size: 1rem;
-      padding: 0.9rem;
-      border: 2px solid var(--green-300);
-      border-radius: var(--radius);
-      background: var(--white);
-      font-weight: 600;
-      color: var(--green-900);
-    }
-
-    .text-center {
-      text-align: center;
-    }
-    .mt-1 {
-      margin-top: 1rem;
-    }
-    .mt-2 {
-      margin-top: 1.5rem;
-    }
-    .gap-1 {
-      gap: 0.75rem;
-    }
-    .flex-wrap {
-      flex-wrap: wrap;
-    }
-
-    /* Hidden PDF template */
-    .pdf-template-hidden {
-      position: absolute;
-      left: -9999px;
-      top: 0;
-      width: 800px;
-      background: white;
-      padding: 30px;
-      z-index: -1;
-    }
+    .pdf-template-hidden { position: absolute; left: -9999px; top: 0; width: 800px; background: white; padding: 25px; z-index: -1; }
   </style>
 </head>
 <body>
   <div class="app-wrapper">
-    <!-- SCHOOL HEADER -->
     <header class="school-header">
       <h1 class="school-name">Al Badar Public School Bahadarkot Kohat</h1>
       <p class="school-subtitle">Copy Inspection &amp; Monitoring System</p>
     </header>
 
-    <!-- DASHBOARD CARDS -->
     <div class="dashboard-grid" id="dashboardGrid">
-      <div class="dash-card" onclick="openModal('teacherModal')">
-        <div class="dash-card-icon teachers"><i class="fas fa-chalkboard-teacher"></i></div>
-        <div class="dash-card-content">
-          <h3>Teacher Record</h3>
-          <div class="card-count" id="teacherCount">0</div>
-          <div class="card-desc">Add / Delete Teachers</div>
-        </div>
-        <i class="fas fa-chevron-right dash-card-arrow"></i>
-      </div>
-
-      <div class="dash-card" onclick="openModal('subjectModal')">
-        <div class="dash-card-icon subjects"><i class="fas fa-book-open"></i></div>
-        <div class="dash-card-content">
-          <h3>Subject Record</h3>
-          <div class="card-count" id="subjectCount">0</div>
-          <div class="card-desc">Add / Delete Subjects</div>
-        </div>
-        <i class="fas fa-chevron-right dash-card-arrow"></i>
-      </div>
-
-      <div class="dash-card" onclick="openModal('classModal')">
-        <div class="dash-card-icon classes"><i class="fas fa-users"></i></div>
-        <div class="dash-card-content">
-          <h3>Class Record</h3>
-          <div class="card-count" id="classCount">0</div>
-          <div class="card-desc">Add / Delete Classes</div>
-        </div>
-        <i class="fas fa-chevron-right dash-card-arrow"></i>
-      </div>
-
-      <div class="dash-card" onclick="openInspectionModal()">
-        <div class="dash-card-icon inspection"><i class="fas fa-clipboard-check"></i></div>
-        <div class="dash-card-content">
-          <h3>Record Inspection</h3>
-          <div class="card-count" id="inspectionCount">0</div>
-          <div class="card-desc">New Inspection Entry</div>
-        </div>
-        <i class="fas fa-chevron-right dash-card-arrow"></i>
-      </div>
-
-      <div class="dash-card" onclick="openReportModal()">
-        <div class="dash-card-icon reports"><i class="fas fa-file-alt"></i></div>
-        <div class="dash-card-content">
-          <h3>Inspection Report</h3>
-          <div class="card-count" id="reportCount">0</div>
-          <div class="card-desc">View & Generate Reports</div>
-        </div>
-        <i class="fas fa-chevron-right dash-card-arrow"></i>
-      </div>
+      <div class="dash-card" onclick="openModal('teacherModal')"><div class="dash-card-icon teachers"><i class="fas fa-chalkboard-teacher"></i></div><div class="dash-card-content"><h3>Teacher Record</h3><div class="card-count" id="teacherCount">0</div><div class="card-desc">Add / Delete Teachers</div></div><i class="fas fa-chevron-right dash-card-arrow"></i></div>
+      <div class="dash-card" onclick="openModal('subjectModal')"><div class="dash-card-icon subjects"><i class="fas fa-book-open"></i></div><div class="dash-card-content"><h3>Subject Record</h3><div class="card-count" id="subjectCount">0</div><div class="card-desc">Add / Delete Subjects</div></div><i class="fas fa-chevron-right dash-card-arrow"></i></div>
+      <div class="dash-card" onclick="openModal('classModal')"><div class="dash-card-icon classes"><i class="fas fa-users"></i></div><div class="dash-card-content"><h3>Class Record</h3><div class="card-count" id="classCount">0</div><div class="card-desc">Add / Delete Classes</div></div><i class="fas fa-chevron-right dash-card-arrow"></i></div>
+      <div class="dash-card" onclick="openInspectionModal()"><div class="dash-card-icon inspection"><i class="fas fa-clipboard-check"></i></div><div class="dash-card-content"><h3>Record Inspection</h3><div class="card-count" id="inspectionCount">0</div><div class="card-desc">New Inspection Entry</div></div><i class="fas fa-chevron-right dash-card-arrow"></i></div>
+      <div class="dash-card" onclick="openReportModal()"><div class="dash-card-icon reports"><i class="fas fa-file-alt"></i></div><div class="dash-card-content"><h3>Inspection Report</h3><div class="card-count" id="reportCount">0</div><div class="card-desc">View & Generate Reports</div></div><i class="fas fa-chevron-right dash-card-arrow"></i></div>
     </div>
   </div>
 
-  <!-- Hidden PDF template container -->
   <div class="pdf-template-hidden" id="pdfTemplateContainer"></div>
-
-  <!-- Dynamic Modals Container -->
   <div id="modalContainer"></div>
-
-  <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
@@ -1015,262 +296,95 @@
       subjects: [],
       classes: [],
       inspections: [],
-
       init() {
-        const saved = localStorage.getItem('alBadarSchoolInspection');
-        if (saved) {
-          try {
-            const data = JSON.parse(saved);
-            this.teachers = data.teachers || [];
-            this.subjects = data.subjects || [];
-            this.classes = data.classes || [];
-            this.inspections = data.inspections || [];
-          } catch (e) { console.warn('State load failed'); }
-        }
-        if (this.teachers.length === 0) {
-          this.teachers = ['Mr. Ahmad Khan', 'Ms. Fatima Zahra', 'Mr. Bilal Siddique', 'Ms. Ayesha Noor'];
-        }
-        if (this.subjects.length === 0) {
-          this.subjects = ['English', 'Urdu', 'Mathematics', 'Science', 'Islamiat'];
-        }
-        if (this.classes.length === 0) {
-          this.classes = [
-            { id: 'c1', name: 'Class 5', totalStudents: 30 },
-            { id: 'c2', name: 'Class 6', totalStudents: 28 }
-          ];
-        }
-        this.save();
-        this.refreshDashboard();
+        const saved = localStorage.getItem('alBadarInspectionV3');
+        if (saved) { try { const d = JSON.parse(saved); this.teachers = d.teachers || []; this.subjects = d.subjects || []; this.classes = d.classes || []; this.inspections = d.inspections || []; } catch(e) {} }
+        if (!this.teachers.length) this.teachers = ['Mr. Ahmad Khan', 'Ms. Fatima Zahra', 'Mr. Bilal Siddique', 'Ms. Ayesha Noor'];
+        if (!this.subjects.length) this.subjects = ['English', 'Urdu', 'Mathematics', 'Science', 'Islamiat'];
+        if (!this.classes.length) this.classes = [{ id: 'c1', name: 'Class 5', totalStudents: 30 }, { id: 'c2', name: 'Class 6', totalStudents: 28 }];
+        this.save(); this.refreshDashboard();
       },
-
-      save() {
-        localStorage.setItem('alBadarSchoolInspection', JSON.stringify({
-          teachers: this.teachers,
-          subjects: this.subjects,
-          classes: this.classes,
-          inspections: this.inspections
-        }));
-      },
-
-      refreshDashboard() {
-        document.getElementById('teacherCount').textContent = this.teachers.length;
-        document.getElementById('subjectCount').textContent = this.subjects.length;
-        document.getElementById('classCount').textContent = this.classes.length;
-        document.getElementById('inspectionCount').textContent = this.inspections.length;
-        document.getElementById('reportCount').textContent = this.inspections.length;
-      },
-
-      addTeacher(name) { if (this.teachers.includes(name)) return false; this.teachers.push(name); this.save(); this.refreshDashboard(); return true; },
-      deleteTeacher(name) { this.teachers = this.teachers.filter(t => t !== name); this.inspections = this.inspections.filter(i => i.teacher !== name); this.save(); this.refreshDashboard(); },
-      addSubject(name) { if (this.subjects.includes(name)) return false; this.subjects.push(name); this.save(); this.refreshDashboard(); return true; },
-      deleteSubject(name) { this.subjects = this.subjects.filter(s => s !== name); this.inspections = this.inspections.filter(i => i.subject !== name); this.save(); this.refreshDashboard(); },
-      addClass(name, total) { const exists = this.classes.some(c => c.name.toLowerCase() === name.toLowerCase()); if (exists) return false; this.classes.push({ id: 'c' + Date.now(), name, totalStudents: parseInt(total) || 30 }); this.save(); this.refreshDashboard(); return true; },
+      save() { localStorage.setItem('alBadarInspectionV3', JSON.stringify({ teachers: this.teachers, subjects: this.subjects, classes: this.classes, inspections: this.inspections })); },
+      refreshDashboard() { document.getElementById('teacherCount').textContent = this.teachers.length; document.getElementById('subjectCount').textContent = this.subjects.length; document.getElementById('classCount').textContent = this.classes.length; document.getElementById('inspectionCount').textContent = this.inspections.length; document.getElementById('reportCount').textContent = this.inspections.length; },
+      addTeacher(n) { if (this.teachers.includes(n)) return false; this.teachers.push(n); this.save(); this.refreshDashboard(); return true; },
+      deleteTeacher(n) { this.teachers = this.teachers.filter(t => t !== n); this.inspections = this.inspections.filter(i => i.teacher !== n); this.save(); this.refreshDashboard(); },
+      addSubject(n) { if (this.subjects.includes(n)) return false; this.subjects.push(n); this.save(); this.refreshDashboard(); return true; },
+      deleteSubject(n) { this.subjects = this.subjects.filter(s => s !== n); this.inspections = this.inspections.filter(i => i.subject !== n); this.save(); this.refreshDashboard(); },
+      addClass(n, t) { if (this.classes.some(c => c.name.toLowerCase() === n.toLowerCase())) return false; this.classes.push({ id: 'c' + Date.now(), name: n, totalStudents: parseInt(t) || 30 }); this.save(); this.refreshDashboard(); return true; },
       deleteClass(id) { this.classes = this.classes.filter(c => c.id !== id); this.inspections = this.inspections.filter(i => i.classId !== id); this.save(); this.refreshDashboard(); },
       getClassById(id) { return this.classes.find(c => c.id === id) || null; },
-
-      recordInspection(inspectionData) {
-        const { date, classId, teacher, subject, checkedSet, totalStudents, remarks } = inspectionData;
-        const existingIndex = this.inspections.findIndex(i =>
-          i.date === date && i.classId === classId && i.teacher === teacher && i.subject === subject
-        );
-        if (existingIndex >= 0) {
-          const existing = this.inspections[existingIndex];
-          const mergedSet = new Set([...existing.checkedSet, ...checkedSet]);
-          existing.checkedSet = Array.from(mergedSet);
-          existing.totalStudents = totalStudents;
-          existing.remarks = remarks || existing.remarks || '';
-          this.inspections[existingIndex] = existing;
-        } else {
-          this.inspections.push({
-            id: 'i' + Date.now(),
-            date,
-            classId,
-            teacher,
-            subject,
-            checkedSet: Array.from(checkedSet),
-            totalStudents,
-            remarks: remarks || ''
-          });
-        }
-        this.save();
-        this.refreshDashboard();
+      recordInspection(data) {
+        const idx = this.inspections.findIndex(i => i.date === data.date && i.classId === data.classId && i.teacher === data.teacher && i.subject === data.subject);
+        if (idx >= 0) { this.inspections[idx] = { ...this.inspections[idx], ...data, id: this.inspections[idx].id }; }
+        else { this.inspections.push({ ...data, id: 'i' + Date.now() }); }
+        this.save(); this.refreshDashboard();
       },
-
-      getInspectionsByDate(dateFilter = null) {
-        const grouped = {};
-        const filtered = dateFilter ? this.inspections.filter(i => i.date === dateFilter) : this.inspections;
-        filtered.forEach(inv => {
-          if (!grouped[inv.date]) grouped[inv.date] = [];
-          grouped[inv.date].push(inv);
-        });
-        const sorted = {};
-        Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a)).forEach(date => {
-          sorted[date] = grouped[date];
-        });
-        return sorted;
-      },
-
-      getUniqueDates() {
-        return [...new Set(this.inspections.map(i => i.date))].sort((a, b) => new Date(b) - new Date(a));
-      },
-
-      getInspectionsForDate(date) {
-        return this.inspections.filter(i => i.date === date);
-      }
+      getInspectionsByDate(df = null) { const g = {}; (df ? this.inspections.filter(i => i.date === df) : this.inspections).forEach(i => { if (!g[i.date]) g[i.date] = []; g[i.date].push(i); }); const s = {}; Object.keys(g).sort((a, b) => new Date(b) - new Date(a)).forEach(d => { s[d] = g[d]; }); return s; },
+      getUniqueDates() { return [...new Set(this.inspections.map(i => i.date))].sort((a, b) => new Date(b) - new Date(a)); },
+      getInspectionsForDate(date) { return this.inspections.filter(i => i.date === date); },
+      getInspectionsForDateAndClass(date, classId) { return this.inspections.filter(i => i.date === date && i.classId === classId); }
     };
 
     // =====================================================
     // MODAL MANAGEMENT
     // =====================================================
     let currentModal = null;
-
-    function openModal(type) {
-      closeModal();
-      const container = document.getElementById('modalContainer');
-      let html = '';
-      if (type === 'teacherModal') html = buildTeacherModal();
-      else if (type === 'subjectModal') html = buildSubjectModal();
-      else if (type === 'classModal') html = buildClassModal();
-      container.innerHTML = html;
-      currentModal = type;
-      bindModalEvents(type);
-    }
-
-    function closeModal() {
-      document.getElementById('modalContainer').innerHTML = '';
-      currentModal = null;
-    }
-
-    function buildTeacherModal() {
-      return `
-        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-          <div class="modal-panel">
-            <div class="modal-header"><h2><i class="fas fa-chalkboard-teacher"></i> Teacher Record</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
-            <div class="modal-body">
-              <div class="form-row"><input type="text" class="form-input" id="newTeacherInput" placeholder="Enter teacher name" style="flex:1;"><button class="btn btn-primary" id="addTeacherBtn"><i class="fas fa-plus"></i> Add</button></div>
-              <div class="list-container mt-1" id="teacherListContainer">${AppState.teachers.map(t => `<div class="list-item"><div class="list-item-info"><i class="fas fa-user-circle"></i> ${escapeHtml(t)}</div><button class="btn btn-danger btn-sm" data-delete-teacher="${escapeHtml(t)}"><i class="fas fa-trash"></i></button></div>`).join('') || '<div class="empty-state"><i class="fas fa-user-slash"></i><p>No teachers added</p></div>'}</div>
-            </div>
-          </div>
-        </div>`;
-    }
-
-    function buildSubjectModal() {
-      return `
-        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-          <div class="modal-panel">
-            <div class="modal-header"><h2><i class="fas fa-book-open"></i> Subject Record</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
-            <div class="modal-body">
-              <div class="form-row"><input type="text" class="form-input" id="newSubjectInput" placeholder="Enter subject name" style="flex:1;"><button class="btn btn-primary" id="addSubjectBtn"><i class="fas fa-plus"></i> Add</button></div>
-              <div class="list-container mt-1" id="subjectListContainer">${AppState.subjects.map(s => `<div class="list-item"><div class="list-item-info"><i class="fas fa-book"></i> ${escapeHtml(s)}</div><button class="btn btn-danger btn-sm" data-delete-subject="${escapeHtml(s)}"><i class="fas fa-trash"></i></button></div>`).join('') || '<div class="empty-state"><i class="fas fa-book-dead"></i><p>No subjects added</p></div>'}</div>
-            </div>
-          </div>
-        </div>`;
-    }
-
-    function buildClassModal() {
-      return `
-        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-          <div class="modal-panel">
-            <div class="modal-header"><h2><i class="fas fa-users"></i> Class Record</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
-            <div class="modal-body">
-              <div class="form-row"><input type="text" class="form-input" id="newClassNameInput" placeholder="Class name" style="flex:2;"><input type="number" class="form-input" id="newClassStudentsInput" placeholder="Students" value="30" min="1" style="flex:1;"><button class="btn btn-primary" id="addClassBtn"><i class="fas fa-plus"></i> Add</button></div>
-              <div class="list-container mt-1" id="classListContainer">${AppState.classes.map(c => `<div class="list-item"><div class="list-item-info"><i class="fas fa-users"></i> ${escapeHtml(c.name)} <span style="color:var(--gray-400);font-size:0.8rem;">(${c.totalStudents} students)</span></div><button class="btn btn-danger btn-sm" data-delete-class="${c.id}"><i class="fas fa-trash"></i></button></div>`).join('') || '<div class="empty-state"><i class="fas fa-user-graduate"></i><p>No classes added</p></div>'}</div>
-            </div>
-          </div>
-        </div>`;
-    }
-
+    function openModal(type) { closeModal(); const c = document.getElementById('modalContainer'); let h = ''; if (type === 'teacherModal') h = buildTeacherModal(); else if (type === 'subjectModal') h = buildSubjectModal(); else if (type === 'classModal') h = buildClassModal(); c.innerHTML = h; currentModal = type; bindModalEvents(type); }
+    function closeModal() { document.getElementById('modalContainer').innerHTML = ''; currentModal = null; }
+    function buildTeacherModal() { return `<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal-panel"><div class="modal-header"><h2><i class="fas fa-chalkboard-teacher"></i> Teacher Record</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-body"><div class="form-row"><input type="text" class="form-input" id="newTeacherInput" placeholder="Enter teacher name" style="flex:1;"><button class="btn btn-primary" id="addTeacherBtn"><i class="fas fa-plus"></i> Add</button></div><div class="list-container mt-1" id="teacherListContainer">${AppState.teachers.map(t => `<div class="list-item"><div class="list-item-info"><i class="fas fa-user-circle"></i> ${escapeHtml(t)}</div><button class="btn btn-danger btn-sm" data-delete-teacher="${escapeHtml(t)}"><i class="fas fa-trash"></i></button></div>`).join('') || '<div class="empty-state"><i class="fas fa-user-slash"></i><p>No teachers</p></div>'}</div></div></div></div>`; }
+    function buildSubjectModal() { return `<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal-panel"><div class="modal-header"><h2><i class="fas fa-book-open"></i> Subject Record</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-body"><div class="form-row"><input type="text" class="form-input" id="newSubjectInput" placeholder="Enter subject name" style="flex:1;"><button class="btn btn-primary" id="addSubjectBtn"><i class="fas fa-plus"></i> Add</button></div><div class="list-container mt-1" id="subjectListContainer">${AppState.subjects.map(s => `<div class="list-item"><div class="list-item-info"><i class="fas fa-book"></i> ${escapeHtml(s)}</div><button class="btn btn-danger btn-sm" data-delete-subject="${escapeHtml(s)}"><i class="fas fa-trash"></i></button></div>`).join('') || '<div class="empty-state"><i class="fas fa-book-dead"></i><p>No subjects</p></div>'}</div></div></div></div>`; }
+    function buildClassModal() { return `<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal-panel"><div class="modal-header"><h2><i class="fas fa-users"></i> Class Record</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-body"><div class="form-row"><input type="text" class="form-input" id="newClassNameInput" placeholder="Class name" style="flex:2;"><input type="number" class="form-input" id="newClassStudentsInput" placeholder="Students" value="30" min="1" style="flex:1;"><button class="btn btn-primary" id="addClassBtn"><i class="fas fa-plus"></i> Add</button></div><div class="list-container mt-1" id="classListContainer">${AppState.classes.map(c => `<div class="list-item"><div class="list-item-info"><i class="fas fa-users"></i> ${escapeHtml(c.name)} <span style="color:var(--gray-400);font-size:0.8rem;">(${c.totalStudents} students)</span></div><button class="btn btn-danger btn-sm" data-delete-class="${c.id}"><i class="fas fa-trash"></i></button></div>`).join('') || '<div class="empty-state"><i class="fas fa-user-graduate"></i><p>No classes</p></div>'}</div></div></div></div>`; }
     function bindModalEvents(type) {
-      if (type === 'teacherModal') {
-        document.getElementById('addTeacherBtn')?.addEventListener('click', () => {
-          const name = document.getElementById('newTeacherInput').value.trim();
-          if (!name) { showToast('Enter teacher name', 'error'); return; }
-          if (AppState.addTeacher(name)) { showToast('Teacher added!', 'success'); openModal('teacherModal'); } else { showToast('Teacher already exists', 'error'); }
-        });
-        document.querySelectorAll('[data-delete-teacher]').forEach(btn => {
-          btn.addEventListener('click', (e) => { e.stopPropagation(); const name = btn.dataset.deleteTeacher; if (confirm(`Delete teacher "${name}"?`)) { AppState.deleteTeacher(name); showToast('Teacher deleted', 'success'); openModal('teacherModal'); } });
-        });
-      } else if (type === 'subjectModal') {
-        document.getElementById('addSubjectBtn')?.addEventListener('click', () => {
-          const name = document.getElementById('newSubjectInput').value.trim();
-          if (!name) { showToast('Enter subject name', 'error'); return; }
-          if (AppState.addSubject(name)) { showToast('Subject added!', 'success'); openModal('subjectModal'); } else { showToast('Subject already exists', 'error'); }
-        });
-        document.querySelectorAll('[data-delete-subject]').forEach(btn => {
-          btn.addEventListener('click', (e) => { e.stopPropagation(); const name = btn.dataset.deleteSubject; if (confirm(`Delete subject "${name}"?`)) { AppState.deleteSubject(name); showToast('Subject deleted', 'success'); openModal('subjectModal'); } });
-        });
-      } else if (type === 'classModal') {
-        document.getElementById('addClassBtn')?.addEventListener('click', () => {
-          const name = document.getElementById('newClassNameInput').value.trim();
-          const total = parseInt(document.getElementById('newClassStudentsInput').value) || 30;
-          if (!name) { showToast('Enter class name', 'error'); return; }
-          if (AppState.addClass(name, total)) { showToast('Class added!', 'success'); openModal('classModal'); } else { showToast('Class already exists', 'error'); }
-        });
-        document.querySelectorAll('[data-delete-class]').forEach(btn => {
-          btn.addEventListener('click', (e) => { e.stopPropagation(); const id = btn.dataset.deleteClass; if (confirm('Delete this class and its records?')) { AppState.deleteClass(id); showToast('Class deleted', 'success'); openModal('classModal'); } });
-        });
-      }
+      if (type === 'teacherModal') { document.getElementById('addTeacherBtn')?.addEventListener('click', () => { const n = document.getElementById('newTeacherInput').value.trim(); if (!n) { showToast('Enter name', 'error'); return; } AppState.addTeacher(n) ? (showToast('Added!', 'success'), openModal('teacherModal')) : showToast('Exists', 'error'); }); document.querySelectorAll('[data-delete-teacher]').forEach(b => b.addEventListener('click', (e) => { e.stopPropagation(); const n = b.dataset.deleteTeacher; if (confirm(`Delete "${n}"?`)) { AppState.deleteTeacher(n); showToast('Deleted', 'success'); openModal('teacherModal'); } })); }
+      else if (type === 'subjectModal') { document.getElementById('addSubjectBtn')?.addEventListener('click', () => { const n = document.getElementById('newSubjectInput').value.trim(); if (!n) { showToast('Enter name', 'error'); return; } AppState.addSubject(n) ? (showToast('Added!', 'success'), openModal('subjectModal')) : showToast('Exists', 'error'); }); document.querySelectorAll('[data-delete-subject]').forEach(b => b.addEventListener('click', (e) => { e.stopPropagation(); const n = b.dataset.deleteSubject; if (confirm(`Delete "${n}"?`)) { AppState.deleteSubject(n); showToast('Deleted', 'success'); openModal('subjectModal'); } })); }
+      else if (type === 'classModal') { document.getElementById('addClassBtn')?.addEventListener('click', () => { const n = document.getElementById('newClassNameInput').value.trim(); const t = parseInt(document.getElementById('newClassStudentsInput').value) || 30; if (!n) { showToast('Enter name', 'error'); return; } AppState.addClass(n, t) ? (showToast('Added!', 'success'), openModal('classModal')) : showToast('Exists', 'error'); }); document.querySelectorAll('[data-delete-class]').forEach(b => b.addEventListener('click', (e) => { e.stopPropagation(); if (confirm('Delete class?')) { AppState.deleteClass(b.dataset.deleteClass); showToast('Deleted', 'success'); openModal('classModal'); } })); }
     }
 
     // =====================================================
-    // INSPECTION MODAL
+    // INSPECTION MODAL - NEW DESIGN
     // =====================================================
-    let inspectionCheckedSet = new Set();
-    let inspectionTotalStudents = 0;
-
     function openInspectionModal() {
       closeModal();
-      inspectionCheckedSet = new Set();
-      const container = document.getElementById('modalContainer');
-      const classOptions = AppState.classes.map(c => `<option value="${c.id}">${escapeHtml(c.name)} (${c.totalStudents} students)</option>`).join('');
-      const teacherOptions = AppState.teachers.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
-      const subjectOptions = AppState.subjects.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
-
-      container.innerHTML = `
-        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-          <div class="modal-panel" style="max-width:750px;">
-            <div class="modal-header"><h2><i class="fas fa-clipboard-check"></i> Record Inspection</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
-            <div class="modal-body">
-              <div class="form-row">
-                <div class="form-group" style="flex:1;"><label class="form-label">Class</label><select class="form-select" id="inspectClass" onchange="loadInspectionGrid()"><option value="">-- Select Class --</option>${classOptions}</select></div>
-                <div class="form-group" style="flex:1;"><label class="form-label">Teacher</label><select class="form-select" id="inspectTeacher"><option value="">-- Select Teacher --</option>${teacherOptions}</select></div>
-                <div class="form-group" style="flex:1;"><label class="form-label">Subject</label><select class="form-select" id="inspectSubject"><option value="">-- Select Subject --</option>${subjectOptions}</select></div>
-              </div>
-              <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="inspectDate" value="${new Date().toISOString().split('T')[0]}"></div>
-              <div id="inspectionGridArea"><div class="empty-state"><i class="fas fa-arrow-up"></i><p>Select a class to load student checkboxes</p></div></div>
-              <div class="inspection-stats" id="inspectionStats" style="display:none;">
-                <div class="inspect-stat checked-stat"><span class="stat-num" id="inspCheckedNum">0</span>Checked</div>
-                <div class="inspect-stat unchecked-stat"><span class="stat-num" id="inspUncheckedNum">0</span>Unchecked</div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-              <button class="btn btn-success" id="recordInspectionBtn"><i class="fas fa-save"></i> Record Inspection</button>
-            </div>
+      const co = AppState.classes.map(c => `<option value="${c.id}">${escapeHtml(c.name)} (${c.totalStudents} students)</option>`).join('');
+      const to = AppState.teachers.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+      const so = AppState.subjects.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+      document.getElementById('modalContainer').innerHTML = `
+        <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal-panel modal-panel-lg"><div class="modal-header"><h2><i class="fas fa-clipboard-check"></i> Record Inspection</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+          <div class="modal-body">
+            <div class="form-row"><div class="form-group" style="flex:1;"><label class="form-label">Class</label><select class="form-select" id="inspectClass" onchange="onClassChangeInspection()"><option value="">-- Select --</option>${co}</select></div><div class="form-group" style="flex:1;"><label class="form-label">Teacher</label><select class="form-select" id="inspectTeacher">${to}</select></div><div class="form-group" style="flex:1;"><label class="form-label">Subject</label><select class="form-select" id="inspectSubject">${so}</select></div></div>
+            <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="inspectDate" value="${new Date().toISOString().split('T')[0]}"></div>
+            <div id="inspectionTablesArea"><div class="empty-state"><i class="fas fa-arrow-up"></i><p>Select a class to load inspection tables</p></div></div>
           </div>
-        </div>`;
+          <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-success" id="recordInspectionBtn"><i class="fas fa-save"></i> Record Inspection</button></div></div></div>`;
       document.getElementById('recordInspectionBtn').addEventListener('click', openRemarksPopup);
       currentModal = 'inspectionModal';
     }
 
-    function loadInspectionGrid() {
-      const classId = document.getElementById('inspectClass').value;
-      const gridArea = document.getElementById('inspectionGridArea');
-      const statsArea = document.getElementById('inspectionStats');
-      if (!classId) { gridArea.innerHTML = '<div class="empty-state"><i class="fas fa-arrow-up"></i><p>Select a class to load student checkboxes</p></div>'; statsArea.style.display = 'none'; return; }
-      const classData = AppState.getClassById(classId);
-      if (!classData) return;
-      inspectionTotalStudents = classData.totalStudents;
-      inspectionCheckedSet = new Set();
-      gridArea.innerHTML = `<label class="form-label">Student Copies - Click to Check/Uncheck</label><div class="student-grid" id="studentCheckGrid">${Array.from({length: classData.totalStudents}, (_, i) => i+1).map(num => `<div class="student-cell" data-roll="${num}"><input type="checkbox" id="stu${num}"><label class="student-card" for="stu${num}"><i class="fas fa-user-graduate student-icon"></i><span class="student-roll">#${num}</span><span class="student-check-badge">✓ Done</span></label></div>`).join('')}</div>`;
-      statsArea.style.display = 'grid';
-      document.querySelectorAll('#studentCheckGrid .student-cell').forEach(cell => { cell.addEventListener('click', function(e) { const roll = parseInt(this.dataset.roll); const checkbox = this.querySelector('input[type="checkbox"]'); checkbox.checked = !checkbox.checked; if (checkbox.checked) inspectionCheckedSet.add(roll); else inspectionCheckedSet.delete(roll); updateInspectionStats(); }); });
-      updateInspectionStats();
+    function onClassChangeInspection() {
+      const cid = document.getElementById('inspectClass').value;
+      const area = document.getElementById('inspectionTablesArea');
+      if (!cid) { area.innerHTML = '<div class="empty-state"><i class="fas fa-arrow-up"></i><p>Select a class to load inspection tables</p></div>'; return; }
+      const cls = AppState.getClassById(cid);
+      if (!cls) return;
+      area.innerHTML = `
+        <div class="section-heading">COPIES CHECK / UNCHECK INSPECTION</div>
+        <table class="entry-table"><thead><tr><th>Total Students</th><th>Checked</th><th>Unchecked</th></tr></thead><tbody><tr><td id="inspectTotal">${cls.totalStudents}</td><td><input type="number" id="inspectChecked" value="0" min="0" max="${cls.totalStudents}" onchange="syncUnchecked()"></td><td><input type="number" id="inspectUnchecked" value="${cls.totalStudents}" min="0" max="${cls.totalStudents}" onchange="syncChecked()"></td></tr></tbody></table>
+        <div class="section-heading">COPIES WORK</div>
+        <table class="entry-table"><thead><tr><th>Total Students</th><th>Complete</th><th>Incomplete</th></tr></thead><tbody><tr><td id="inspectTotal2">${cls.totalStudents}</td><td><input type="number" id="inspectComplete" value="0" min="0" max="${cls.totalStudents}"></td><td><input type="number" id="inspectIncomplete" value="${cls.totalStudents}" min="0" max="${cls.totalStudents}"></td></tr></tbody></table>`;
+      syncUnchecked();
     }
 
-    function updateInspectionStats() {
-      document.getElementById('inspCheckedNum').textContent = inspectionCheckedSet.size;
-      document.getElementById('inspUncheckedNum').textContent = inspectionTotalStudents - inspectionCheckedSet.size;
+    function syncUnchecked() {
+      const total = parseInt(document.getElementById('inspectTotal')?.textContent) || 0;
+      const checked = parseInt(document.getElementById('inspectChecked')?.value) || 0;
+      const uncheckedInput = document.getElementById('inspectUnchecked');
+      if (uncheckedInput) uncheckedInput.value = Math.max(0, total - checked);
+    }
+    function syncChecked() {
+      const total = parseInt(document.getElementById('inspectTotal')?.textContent) || 0;
+      const unchecked = parseInt(document.getElementById('inspectUnchecked')?.value) || 0;
+      const checkedInput = document.getElementById('inspectChecked');
+      if (checkedInput) checkedInput.value = Math.max(0, total - unchecked);
     }
 
     // =====================================================
@@ -1282,27 +396,30 @@
       const subject = document.getElementById('inspectSubject').value;
       const date = document.getElementById('inspectDate').value;
       if (!classId || !teacher || !subject || !date) { showToast('Please fill all fields', 'error'); return; }
-      if (inspectionCheckedSet.size === 0) { showToast('Please check at least one student copy', 'error'); return; }
+      const cls = AppState.getClassById(classId);
+      const total = cls ? cls.totalStudents : 0;
+      const checked = parseInt(document.getElementById('inspectChecked')?.value) || 0;
+      const unchecked = parseInt(document.getElementById('inspectUnchecked')?.value) || 0;
+      const complete = parseInt(document.getElementById('inspectComplete')?.value) || 0;
+      const incomplete = parseInt(document.getElementById('inspectIncomplete')?.value) || 0;
+      const outcome = total > 0 ? Math.round((checked / total) * 100) : 0;
 
-      const container = document.getElementById('modalContainer');
-      container.innerHTML = `
-        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-          <div class="modal-panel modal-panel-sm">
-            <div class="modal-header"><h2><i class="fas fa-pen-to-square"></i> Add Remarks</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
-            <div class="modal-body">
-              <p style="font-size:0.85rem;color:var(--gray-500);margin-bottom:0.75rem;"><strong>Class:</strong> ${escapeHtml(AppState.getClassById(classId)?.name || '')} | <strong>Teacher:</strong> ${escapeHtml(teacher)} | <strong>Subject:</strong> ${escapeHtml(subject)}</p>
-              <div class="form-group"><label class="form-label">Remarks / Comments</label><textarea class="form-textarea" id="inspectRemarks" placeholder="Enter your remarks or observations for this inspection...">Good work, need improvement in handwriting.</textarea></div>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-              <button class="btn btn-success" id="saveWithRemarksBtn"><i class="fas fa-check-circle"></i> OK - Save Inspection</button>
-            </div>
+      document.getElementById('modalContainer').innerHTML = `
+        <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal-panel modal-panel-sm"><div class="modal-header"><h2><i class="fas fa-pen-to-square"></i> Inspection Summary</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+          <div class="modal-body">
+            <p style="font-weight:700;color:var(--green-900);">${escapeHtml(teacher)} | ${escapeHtml(cls?.name||'')}</p>
+            <table class="entry-table" style="margin-bottom:0.75rem;"><thead><tr><th>Check/Uncheck</th><th>Checked</th><th>Unchecked</th></tr></thead><tbody><tr><td></td><td>${checked}</td><td>${unchecked}</td></tr></tbody></table>
+            <table class="entry-table" style="margin-bottom:1rem;"><thead><tr><th>Complete/Incomplete</th><th>Complete</th><th>Incomplete</th></tr></thead><tbody><tr><td></td><td>${complete}</td><td>${incomplete}</td></tr></tbody></table>
+            <hr style="border-color:var(--gray-200);margin:0.75rem 0;">
+            <div class="form-group"><label class="form-label">Outcome Percentage (%)</label><input type="number" class="form-input" id="inspectOutcome" value="${outcome}" min="0" max="100"></div>
+            <div class="form-group"><label class="form-label">Remarks</label><textarea class="form-textarea" id="inspectRemarks" placeholder="Enter remarks...">Good work, need improvement.</textarea></div>
           </div>
-        </div>`;
-      document.getElementById('saveWithRemarksBtn').addEventListener('click', () => {
+          <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-success" id="saveInspectionBtn"><i class="fas fa-check-circle"></i> OK - Save</button></div></div></div>`;
+      document.getElementById('saveInspectionBtn').addEventListener('click', () => {
+        const outcomeVal = parseInt(document.getElementById('inspectOutcome').value) || 0;
         const remarks = document.getElementById('inspectRemarks').value.trim();
-        AppState.recordInspection({ date, classId, teacher, subject, checkedSet: inspectionCheckedSet, totalStudents: inspectionTotalStudents, remarks });
-        showToast('Inspection recorded successfully!', 'success');
+        AppState.recordInspection({ date, classId, teacher, subject, totalStudents: total, checked, unchecked, complete, incomplete, outcome: outcomeVal, remarks });
+        showToast('Inspection recorded!', 'success');
         closeModal();
       });
       currentModal = 'remarksPopup';
@@ -1313,163 +430,95 @@
     // =====================================================
     function openReportModal() {
       closeModal();
-      const container = document.getElementById('modalContainer');
       const grouped = AppState.getInspectionsByDate();
       const dates = Object.keys(grouped);
-      let html = `
-        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-          <div class="modal-panel" style="max-width:950px;">
-            <div class="modal-header"><h2><i class="fas fa-file-alt"></i> Inspection Report</h2><div style="display:flex;gap:0.5rem;"><button class="btn btn-success btn-sm" id="openPDFPopupBtn"><i class="fas fa-file-pdf"></i> Generate PDF</button><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div></div>
-            <div class="modal-body" id="reportContent">`;
-      if (dates.length === 0) {
-        html += '<div class="empty-state"><i class="fas fa-clipboard-list"></i><p>No inspection records found</p></div>';
-      } else {
-        dates.forEach(date => {
-          const inspections = grouped[date];
-          html += `<div class="date-group"><div class="date-header" onclick="toggleDateBody(this)"><span><i class="fas fa-calendar-alt"></i> ${date}</span><span style="font-size:0.8rem;color:var(--green-600);">${inspections.length} record(s) <i class="fas fa-chevron-down"></i></span></div><div class="date-body"><div class="report-table-wrap"><table class="report-table"><thead><tr><th>Class</th><th>Teacher</th><th>Subject</th><th>Total</th><th>Checked</th><th>Unchecked</th><th>Outcome</th><th>Grade</th><th>Remarks</th></tr></thead><tbody>${inspections.map(inv => buildInspectionRow(inv)).join('')}</tbody></table></div></div></div>`;
-        });
-      }
+      let html = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal-panel" style="max-width:950px;"><div class="modal-header"><h2><i class="fas fa-file-alt"></i> Inspection Report</h2><div style="display:flex;gap:0.5rem;"><button class="btn btn-success btn-sm" id="openPDFPopupBtn"><i class="fas fa-file-pdf"></i> Generate PDF</button><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div></div><div class="modal-body" id="reportContent">`;
+      if (!dates.length) { html += '<div class="empty-state"><i class="fas fa-clipboard-list"></i><p>No records</p></div>'; }
+      else { dates.forEach(d => { const insp = grouped[d]; html += `<div class="date-group"><div class="date-header" onclick="toggleDateBody(this)"><span><i class="fas fa-calendar-alt"></i> ${d}</span><span style="font-size:0.8rem;color:var(--green-600);">${insp.length} record(s) <i class="fas fa-chevron-down"></i></span></div><div class="date-body"><div class="report-table-wrap"><table class="report-table"><thead><tr><th>Class</th><th>Teacher</th><th>Subject</th><th>Total</th><th>Checked</th><th>Unchecked</th><th>Complete</th><th>Incomplete</th><th>Outcome</th><th>Grade</th><th>Remarks</th></tr></thead><tbody>${insp.map(i => buildRow(i)).join('')}</tbody></table></div></div></div>`; }); }
       html += `</div></div></div>`;
-      container.innerHTML = html;
-      document.getElementById('openPDFPopupBtn')?.addEventListener('click', openPDFDateSelector);
+      document.getElementById('modalContainer').innerHTML = html;
+      document.getElementById('openPDFPopupBtn')?.addEventListener('click', openPDFSelector);
       currentModal = 'reportModal';
     }
 
-    function buildInspectionRow(inv) {
-      const cls = AppState.getClassById(inv.classId);
-      const className = cls ? cls.name : 'Unknown';
-      const checked = inv.checkedSet.length;
-      const unchecked = inv.totalStudents - checked;
-      const outcome = Math.round((checked / inv.totalStudents) * 100);
-      const grade = outcome >= 90 ? 'A' : outcome >= 80 ? 'B' : outcome >= 70 ? 'C' : outcome >= 60 ? 'D' : 'F';
-      const remarks = inv.remarks || (outcome >= 90 ? 'Excellent' : outcome >= 80 ? 'Very Good' : outcome >= 70 ? 'Good' : outcome >= 60 ? 'Needs Improvement' : 'Critical');
-      return `<tr><td>${escapeHtml(className)}</td><td>${escapeHtml(inv.teacher)}</td><td>${escapeHtml(inv.subject)}</td><td>${inv.totalStudents}</td><td style="color:var(--green-600);">${checked}</td><td style="color:var(--red-500);">${unchecked}</td><td><strong>${outcome}%</strong></td><td><span class="grade-badge grade-${grade.toLowerCase()}">${grade}</span></td><td style="font-size:0.75rem;">${escapeHtml(remarks)}</td></tr>`;
+    function buildRow(inv) {
+      const cls = AppState.getClassById(inv.classId); const cn = cls ? cls.name : 'Unknown';
+      const out = inv.outcome ?? 0;
+      const g = out >= 90 ? 'A' : out >= 80 ? 'B' : out >= 70 ? 'C' : out >= 60 ? 'D' : 'F';
+      return `<tr><td>${escapeHtml(cn)}</td><td>${escapeHtml(inv.teacher)}</td><td>${escapeHtml(inv.subject)}</td><td>${inv.totalStudents}</td><td style="color:var(--green-600);">${inv.checked??0}</td><td style="color:var(--red-500);">${inv.unchecked??0}</td><td style="color:var(--blue-500);">${inv.complete??0}</td><td style="color:var(--amber-500);">${inv.incomplete??0}</td><td><strong>${out}%</strong></td><td><span class="grade-badge grade-${g.toLowerCase()}">${g}</span></td><td style="font-size:0.7rem;">${escapeHtml(inv.remarks||'')}</td></tr>`;
     }
-
-    function toggleDateBody(header) {
-      const body = header.nextElementSibling;
-      body.classList.toggle('collapsed');
-      const icon = header.querySelector('.fa-chevron-down, .fa-chevron-up');
-      if (body.classList.contains('collapsed')) icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-      else icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
-    }
+    function toggleDateBody(h) { const b = h.nextElementSibling; b.classList.toggle('collapsed'); const i = h.querySelector('.fa-chevron-down,.fa-chevron-up'); i.classList.toggle('fa-chevron-down'); i.classList.toggle('fa-chevron-up'); }
 
     // =====================================================
-    // PDF DATE SELECTOR POPUP
+    // PDF SELECTOR POPUP
     // =====================================================
-    function openPDFDateSelector() {
-      const uniqueDates = AppState.getUniqueDates();
-      if (uniqueDates.length === 0) { showToast('No inspection dates available', 'error'); return; }
-      const container = document.getElementById('modalContainer');
-      container.innerHTML = `
-        <div class="modal-overlay" onclick="if(event.target===this)closeModal()">
-          <div class="modal-panel modal-panel-sm">
-            <div class="modal-header"><h2><i class="fas fa-file-pdf"></i> Generate PDF Report</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
-            <div class="modal-body">
-              <p style="font-size:0.85rem;color:var(--gray-500);margin-bottom:1rem;">Select an inspection date to generate the PDF report:</p>
-              <div class="form-group"><label class="form-label">Inspection Date</label><select class="form-select pdf-date-select" id="pdfDateSelect">${uniqueDates.map(d => `<option value="${d}">${d} (${AppState.getInspectionsForDate(d).length} records)</option>`).join('')}</select></div>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-              <button class="btn btn-success" id="generatePDFForDateBtn"><i class="fas fa-file-pdf"></i> Generate PDF</button>
-            </div>
+    function openPDFSelector() {
+      const dates = AppState.getUniqueDates();
+      if (!dates.length) { showToast('No dates', 'error'); return; }
+      const co = AppState.classes.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+      document.getElementById('modalContainer').innerHTML = `
+        <div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal-panel modal-panel-sm"><div class="modal-header"><h2><i class="fas fa-file-pdf"></i> Generate PDF</h2><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+          <div class="modal-body">
+            <div class="form-group"><label class="form-label">Select Date</label><select class="form-select" id="pdfDateSelect">${dates.map(d => `<option value="${d}">${d}</option>`).join('')}</select></div>
+            <div class="form-group"><label class="form-label">Select Class</label><select class="form-select" id="pdfClassSelect"><option value="all">All Classes</option>${co}</select></div>
           </div>
-        </div>`;
-      document.getElementById('generatePDFForDateBtn').addEventListener('click', () => {
-        const selectedDate = document.getElementById('pdfDateSelect').value;
-        generatePDFForDate(selectedDate);
-      });
-      currentModal = 'pdfDateSelector';
+          <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-success" id="genPDFBtn"><i class="fas fa-file-pdf"></i> Generate</button></div></div></div>`;
+      document.getElementById('genPDFBtn').addEventListener('click', () => { const d = document.getElementById('pdfDateSelect').value; const cid = document.getElementById('pdfClassSelect').value; generatePDF(d, cid); });
+      currentModal = 'pdfSelector';
     }
 
     // =====================================================
-    // BUILD PDF TEMPLATE
+    // BUILD PDF HTML
     // =====================================================
-    function buildPDFTemplateHTML(inspections, date) {
-      if (!inspections || inspections.length === 0) return '';
-      const classNames = [...new Set(inspections.map(inv => { const cls = AppState.getClassById(inv.classId); return cls ? cls.name : 'Unknown'; }))];
-      const classNameDisplay = classNames.join(', ');
+    function buildPDFHTML(inspections, className, date, totalStudents) {
       let rows = '';
       inspections.forEach(inv => {
-        const cls = AppState.getClassById(inv.classId);
-        const clsName = cls ? cls.name : 'Unknown';
-        const checked = inv.checkedSet.length;
-        const unchecked = inv.totalStudents - checked;
-        const outcome = Math.round((checked / inv.totalStudents) * 100);
-        const grade = outcome >= 90 ? 'A' : outcome >= 80 ? 'B' : outcome >= 70 ? 'C' : outcome >= 60 ? 'D' : 'F';
-        const remarks = inv.remarks || (outcome >= 90 ? 'Excellent' : outcome >= 80 ? 'Very Good' : outcome >= 70 ? 'Good' : outcome >= 60 ? 'Needs Improvement' : 'Critical');
-        rows += `<tr><td>${escapeHtml(clsName)}</td><td>${escapeHtml(inv.teacher)}</td><td>${escapeHtml(inv.subject)}</td><td>${inv.totalStudents}</td><td>${checked}</td><td>${unchecked}</td><td><strong>${outcome}%</strong></td><td><span class="pdf-grade-badge pdf-grade-${grade.toLowerCase()}">${grade}</span></td><td>${escapeHtml(remarks)}</td></tr>`;
+        const cls = AppState.getClassById(inv.classId); const cn = cls ? cls.name : className;
+        const out = inv.outcome ?? 0;
+        rows += `<tr><td>${escapeHtml(inv.teacher)}</td><td>${escapeHtml(inv.subject)}</td><td>${inv.checked??0}</td><td>${inv.unchecked??0}</td><td>${inv.complete??0}</td><td>${inv.incomplete??0}</td><td><strong>${out}%</strong></td><td>${escapeHtml(inv.remarks||'')}</td></tr>`;
       });
-      return `<div class="pdf-report-container"><div class="pdf-report-header"><div class="pdf-school-name">Al Badar Public School Bahadarkot Kohat</div><div class="pdf-report-title">COPIES INSPECTION REPORT SUMMARY</div></div><div class="pdf-report-meta"><span><span class="meta-label">Class:</span> ${escapeHtml(classNameDisplay)}</span><span><span class="meta-label">Date:</span> ${date}</span></div><table class="pdf-report-table"><thead><tr><th>Class</th><th>Teacher</th><th>Subject</th><th>Total Students</th><th>Checked</th><th>Unchecked</th><th>Outcome %</th><th>Grade</th><th>Remarks</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+      return `<div class="pdf-report-container">
+        <div class="pdf-report-header"><div class="pdf-school-name">COPIES INSPECTION REPORT</div></div>
+        <div class="pdf-report-meta"><span><strong>Class:</strong> ${escapeHtml(className)} | <strong>Total Students:</strong> ${totalStudents}</span><span><strong>Date:</strong> ${date}</span></div>
+        <table class="pdf-report-table"><thead><tr><th>Teacher</th><th>Subject</th><th colspan="4">Copies Inspection Details</th><th>Outcome</th><th>Remarks</th></tr><tr><th></th><th></th><th>Checked</th><th>Unchecked</th><th>Complete</th><th>Incomplete</th><th></th><th></th></tr></thead><tbody>${rows}</tbody></table>
+        <div class="pdf-urdu-note">بچوں کو کاپیوں کا کام مکمل کروانے کے لئے کلاس سے باہر ہر گز نہ بیٹھائیں بلکہ کلاس میں اپنی نگرانی میں کام کروایا کریں۔</div>
+      </div>`;
     }
 
     // =====================================================
-    // PDF GENERATION FOR SPECIFIC DATE
+    // GENERATE PDF
     // =====================================================
-    async function generatePDFForDate(date) {
-      const inspections = AppState.getInspectionsForDate(date);
-      if (inspections.length === 0) { showToast('No records for this date', 'error'); return; }
+    async function generatePDF(date, classId) {
+      let insp = AppState.getInspectionsForDate(date);
+      if (classId !== 'all') { insp = insp.filter(i => i.classId === classId); }
+      if (!insp.length) { showToast('No records for this selection', 'error'); return; }
+      const first = insp[0]; const cls = AppState.getClassById(first.classId);
+      const className = classId !== 'all' ? (cls ? cls.name : 'Unknown') : [...new Set(insp.map(i => { const c = AppState.getClassById(i.classId); return c ? c.name : ''; }))].join(', ');
+      const totalStudents = classId !== 'all' ? (cls ? cls.totalStudents : first.totalStudents) : Math.max(...insp.map(i => i.totalStudents || 0));
       showToast('Generating PDF...', 'info');
-      const pdfHTML = buildPDFTemplateHTML(inspections, date);
-      const pdfContainer = document.getElementById('pdfTemplateContainer');
-      pdfContainer.innerHTML = pdfHTML;
-      pdfContainer.style.left = '0';
-      pdfContainer.style.top = '0';
-      pdfContainer.style.zIndex = '-1';
-      pdfContainer.style.position = 'fixed';
-      await new Promise(resolve => setTimeout(resolve, 300));
+      const pdfHTML = buildPDFHTML(insp, className, date, totalStudents);
+      const container = document.getElementById('pdfTemplateContainer');
+      container.innerHTML = pdfHTML; container.style.left = '0'; container.style.top = '0'; container.style.position = 'fixed'; container.style.zIndex = '-1';
+      await new Promise(r => setTimeout(r, 400));
       try {
-        const canvas = await html2canvas(pdfContainer, { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff', width: pdfContainer.scrollWidth, height: pdfContainer.scrollHeight });
-        const imgData = canvas.toDataURL('image/png');
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = pageWidth - 16;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let heightLeft = imgHeight;
-        let position = 8;
-        pdf.addImage(imgData, 'PNG', 8, position, imgWidth, imgHeight);
-        heightLeft -= (pageHeight - 16);
-        let page = 1;
-        while (heightLeft > 0) {
-          position = -(pageHeight * page - 16);
-          pdf.addPage();
-          pdf.addImage(imgData, 'PNG', 8, position, imgWidth, imgHeight);
-          heightLeft -= (pageHeight - 16);
-          page++;
-        }
-        pdf.save(`Inspection_Report_${date}.pdf`);
-        showToast('PDF downloaded successfully!', 'success');
-      } catch (e) {
-        console.error('PDF error:', e);
-        showToast('PDF generation failed', 'error');
-      }
-      pdfContainer.style.left = '-9999px';
-      pdfContainer.style.position = 'absolute';
-      pdfContainer.innerHTML = '';
+        const canvas = await html2canvas(container, { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff', width: container.scrollWidth, height: container.scrollHeight });
+        const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'mm', 'a4');
+        const pw = pdf.internal.pageSize.getWidth(); const ph = pdf.internal.pageSize.getHeight();
+        const iw = pw - 16; const ih = (canvas.height * iw) / canvas.width;
+        let hl = ih, pos = 8; pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 8, pos, iw, ih); hl -= (ph - 16); let pg = 1;
+        while (hl > 0) { pos = -(ph * pg - 16); pdf.addPage(); pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 8, pos, iw, ih); hl -= (ph - 16); pg++; }
+        pdf.save(`Inspection_${date}_${className.replace(/\s/g,'_')}.pdf`);
+        showToast('PDF downloaded!', 'success');
+      } catch(e) { console.error(e); showToast('PDF failed', 'error'); }
+      container.style.left = '-9999px'; container.style.position = 'absolute'; container.innerHTML = '';
       closeModal();
     }
 
     // =====================================================
     // UTILITY
     // =====================================================
-    function showToast(message, type = 'info') {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = `toast toast-${type}`;
-      const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
-      toast.innerHTML = `<i class="fas ${icons[type]}"></i> ${message}`;
-      container.appendChild(toast);
-      setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 3000);
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
+    function showToast(m, t = 'info') { const c = document.getElementById('toastContainer'); const el = document.createElement('div'); el.className = `toast toast-${t}`; const ic = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' }; el.innerHTML = `<i class="fas ${ic[t]}"></i> ${m}`; c.appendChild(el); setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; setTimeout(() => el.remove(), 300); }, 3000); }
+    function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
     AppState.init();
   </script>
